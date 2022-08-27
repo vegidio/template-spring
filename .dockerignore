@@ -1,0 +1,9 @@
+.DS_Store
+.dockerignore
+.editorconfig
+.gitignore
+.gradle
+.idea
+Dockerfile
+HELP.md
+build/
