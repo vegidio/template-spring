@@ -1,4 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 plugins {
     id("io.spring.dependency-management") version "1.0.13.RELEASE"
@@ -42,7 +44,8 @@ tasks.withType<Test> {
 }
 
 tasks.register<Exec>("docker") {
+    val calver = LocalDate.now().format(DateTimeFormatter.ofPattern("uu.M.d"))
     workingDir(".")
     executable("docker")
-    args("build", "-t", "vegidio/tpl-spring", ".", "--build-arg", "VERSION=$(date +'%y.%-m.%-d')")
+    args("build", "-t", "vegidio/tpl-spring", ".", "--build-arg", "VERSION=$calver")
 }
