@@ -5,5 +5,5 @@
 .gradle
 .idea
 Dockerfile
-HELP.md
+README.md
 build/

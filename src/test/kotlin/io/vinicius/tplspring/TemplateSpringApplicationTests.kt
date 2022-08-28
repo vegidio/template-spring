@@ -9,5 +9,4 @@ class TemplateSpringApplicationTests {
     @Test
     fun contextLoads() {
     }
-
 }
