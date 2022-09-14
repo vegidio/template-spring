@@ -9,7 +9,7 @@ import javax.validation.constraints.Size
 
 @Validated
 @RestController
-@RequestMapping("countries")
+@RequestMapping("v1/countries")
 class CountryController(private val countryService: CountryService) {
 
     @GetMapping

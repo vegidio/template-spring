@@ -38,6 +38,6 @@ ARG VERSION
 ENV IMAGE_VERSION=$VERSION
 
 COPY --from=BUILD_IMAGE /spring/build/libs/tpl-spring-1.0.0.jar /var/spring.jar
-EXPOSE 8080
+EXPOSE 3000
 
 CMD ["java", "-jar", "/var/spring.jar"]

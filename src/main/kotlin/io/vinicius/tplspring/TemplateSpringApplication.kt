@@ -9,5 +9,5 @@ class TemplateSpringApplication
 fun main(args: Array<String>) {
     runApplication<TemplateSpringApplication>(*args)
 
-    println("Server running on http://localhost:8080")
+    println("Server running on http://localhost:3000")
 }
