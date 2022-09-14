@@ -1,1 +1,1 @@
-rootProject.name = "tpl-spring"
+rootProject.name = "template-spring"
