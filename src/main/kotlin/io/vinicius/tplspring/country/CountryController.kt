@@ -1,5 +1,6 @@
 package io.vinicius.tplspring.country
 
+import io.vinicius.tplspring.converter.CountryCode
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -18,7 +19,7 @@ class CountryController(private val countryService: CountryService) {
     }
 
     @GetMapping("{code}")
-    fun findByCode(@PathVariable("code") @Size(min = 3, max = 3) code: String): Country {
+    fun findByCode(@PathVariable @Size(min = 3, max = 3) @CountryCode code: String): Country {
         return countryService.findByCode(code)
     }
 }
