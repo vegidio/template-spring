@@ -11,9 +11,9 @@ RUN ./gradlew bootJar
 
 # Creating list of dependencies
 WORKDIR /spring/build/libs
-RUN unzip tpl-spring-1.0.0.jar
+RUN unzip template-spring-1.0.0.jar
 RUN jdeps --print-module-deps --ignore-missing-deps --recursive --multi-release 17 \
-    --class-path="BOOT-INF/lib/*" --module-path="BOOT-INF/lib/*" tpl-spring-1.0.0.jar > /deps.txt
+    --class-path="BOOT-INF/lib/*" --module-path="BOOT-INF/lib/*" template-spring-1.0.0.jar > /deps.txt
 
 # Build small JRE image
 RUN jlink --verbose \
@@ -37,7 +37,7 @@ COPY --from=BUILD_IMAGE /customjre $JAVA_HOME
 ARG VERSION
 ENV IMAGE_VERSION=$VERSION
 
-COPY --from=BUILD_IMAGE /spring/build/libs/tpl-spring-1.0.0.jar /var/spring.jar
+COPY --from=BUILD_IMAGE /spring/build/libs/template-spring-1.0.0.jar /var/spring.jar
 EXPOSE 3000
 
 CMD ["java", "-jar", "/var/spring.jar"]

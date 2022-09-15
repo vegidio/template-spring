@@ -5,12 +5,12 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
-class CountryService(private val countryRepository: CountryRepository) {
+class CountryService(private val countryRepo: CountryRepository) {
     fun findAll(): List<Country> {
-        return countryRepository.findCountries()
+        return countryRepo.findCountries()
     }
 
     fun findByCode(code: String): Country {
-        return countryRepository.findByIdOrNull(code) ?: throw NotFoundException()
+        return countryRepo.findByIdOrNull(code) ?: throw NotFoundException()
     }
 }
