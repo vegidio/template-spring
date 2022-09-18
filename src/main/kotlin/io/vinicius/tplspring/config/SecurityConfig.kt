@@ -11,10 +11,12 @@ import io.vinicius.tplspring.exception.UnauthorizedException
 import io.vinicius.tplspring.ktx.date
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.JwtEncoder
@@ -29,10 +31,11 @@ class SecurityConfig(private val certProperties: CertProperties) {
         return http
             .csrf().disable()
             .authorizeRequests {
-                it.antMatchers("/api/v1/countries").authenticated()
+                it.antMatchers("/v1/countries/**").authenticated()
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .oauth2ResourceServer(OAuth2ResourceServerConfigurer<HttpSecurity>::jwt)
+            .httpBasic(Customizer.withDefaults())
             .build()
     }
 
@@ -74,4 +77,7 @@ class SecurityConfig(private val certProperties: CertProperties) {
             signedJwt.jwtClaimsSet.toJSONObject()
         )
     }
+
+    @Bean
+    fun argon2(): Argon2PasswordEncoder = Argon2PasswordEncoder()
 }

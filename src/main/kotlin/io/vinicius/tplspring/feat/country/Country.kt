@@ -1,4 +1,4 @@
-package io.vinicius.tplspring.country
+package io.vinicius.tplspring.feat.country
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import org.hibernate.annotations.Type
