@@ -1,11 +1,14 @@
 package io.vinicius.tplspring.exception
 
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.AuthenticationException
 
 class UnauthorizedException(
-    status: HttpStatus = HttpStatus.UNAUTHORIZED,
+    val status: HttpStatus = HttpStatus.UNAUTHORIZED,
     type: String = "UNAUTHORIZED",
     title: String? = "Unauthorized",
     detail: String? = null,
     instance: String? = null
-) : HttpException(status, type, title, detail, instance)
+) : AuthenticationException(type) {
+    val body = HttpException.Body(status.value(), type, title, detail, instance)
+}
