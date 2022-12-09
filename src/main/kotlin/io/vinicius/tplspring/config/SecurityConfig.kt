@@ -8,7 +8,8 @@ import com.nimbusds.jose.crypto.ECDSAVerifier
 import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.SignedJWT
 import io.vinicius.tplspring.exception.UnauthorizedException
-import io.vinicius.tplspring.ktx.date
+import io.vinicius.tplspring.ktx.isFresh
+import io.vinicius.tplspring.ktx.toJwt
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -17,13 +18,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder
-import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.JwtEncoder
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.web.servlet.HandlerExceptionResolver
-import java.time.LocalDateTime
 
 @Configuration
 @EnableWebSecurity
@@ -55,36 +54,29 @@ class SecurityConfig(
             .type(JOSEObjectType.JWT)
             .build()
 
-        val payload = JWTClaimsSet.Builder(JWTClaimsSet.parse(params.claims.claims))
-            .issueTime(LocalDateTime.now().date)
-            .expirationTime(LocalDateTime.now().plusHours(1).date)
-            .build()
+        val payload = JWTClaimsSet.parse(params.claims.claims)
 
         val signedJwt = SignedJWT(header, payload)
         signedJwt.sign(ECDSASigner(certProperties.privateKey))
-
-        Jwt(
-            signedJwt.serialize(),
-            signedJwt.jwtClaimsSet.issueTime.toInstant(),
-            signedJwt.jwtClaimsSet.expirationTime.toInstant(),
-            signedJwt.header.toJSONObject(),
-            signedJwt.jwtClaimsSet.toJSONObject()
-        )
+        signedJwt.toJwt()
     }
 
     @Bean
     fun jwtDecoder() = JwtDecoder { token ->
         val signedJwt = SignedJWT.parse(token)
         val isValid = signedJwt.verify(ECDSAVerifier(certProperties.publicKey))
-        if (!isValid) throw UnauthorizedException(type = "AUTH_INVALID", detail = "The bearer token is invalid.")
 
-        Jwt(
-            token,
-            signedJwt.jwtClaimsSet.issueTime.toInstant(),
-            signedJwt.jwtClaimsSet.expirationTime.toInstant(),
-            signedJwt.header.toJSONObject(),
-            signedJwt.jwtClaimsSet.toJSONObject()
+        if (!isValid) throw UnauthorizedException(
+            type = "JWT_INVALID",
+            detail = "The bearer token is invalid"
         )
+
+        if (!signedJwt.isFresh()) throw UnauthorizedException(
+            type = "JWT_EXPIRED",
+            detail = "The bearer token expired"
+        )
+
+        signedJwt.toJwt()
     }
 
     @Bean
