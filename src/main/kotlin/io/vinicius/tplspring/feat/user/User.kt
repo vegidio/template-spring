@@ -1,5 +1,7 @@
 package io.vinicius.tplspring.feat.user
 
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonProperty.*
 import org.hibernate.annotations.Generated
 import org.hibernate.annotations.GenerationTime
 import javax.persistence.Entity
@@ -15,5 +17,7 @@ data class User(
     val name: String,
     val username: String,
     val email: String,
+
+    @JsonProperty(access = Access.WRITE_ONLY)
     val hash: String
 )

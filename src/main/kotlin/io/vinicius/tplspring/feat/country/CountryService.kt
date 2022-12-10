@@ -11,6 +11,6 @@ class CountryService(private val countryRepo: CountryRepository) {
     }
 
     fun findByCode(code: String): Country {
-        return countryRepo.findByIdOrNull(code) ?: throw NotFoundException()
+        return countryRepo.findByIdOrNull(code) ?: throw NotFoundException(detail = "No country found with this code")
     }
 }

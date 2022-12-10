@@ -36,6 +36,7 @@ class SecurityConfig(
             .csrf().disable()
             .authorizeRequests {
                 it.antMatchers("/v1/countries/**").authenticated()
+                it.antMatchers("/v1/users/**").authenticated()
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .oauth2ResourceServer { it.authenticationEntryPoint(authEntryPoint()).jwt() }
