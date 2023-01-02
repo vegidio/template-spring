@@ -12,8 +12,10 @@ import org.springframework.stereotype.Component
 @Configuration
 @ConfigurationProperties("cert")
 data class CertProperties(
-    var privateKey: ECKey? = null,
-    var publicKey: ECKey? = null
+    var accessTokenPrivate: ECKey? = null,
+    var accessTokenPublic: ECKey? = null,
+    var refreshTokenPrivate: ECKey? = null,
+    var refreshTokenPublic: ECKey? = null
 )
 
 @Component

@@ -1,5 +1,6 @@
 package io.vinicius.tplspring.feat.country
 
+import io.swagger.v3.oas.annotations.tags.Tag
 import io.vinicius.tplspring.feat.country.converter.CountryCode
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
@@ -11,6 +12,7 @@ import javax.validation.constraints.Size
 @Validated
 @RestController
 @RequestMapping("v1/countries")
+@Tag(name = "Country")
 class CountryController(private val countryService: CountryService) {
 
     @GetMapping

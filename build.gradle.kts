@@ -22,7 +22,7 @@ repositories {
 dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-jaxb-annotations")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("com.vladmihalcea:hibernate-types-55:2.19.2")
+    implementation("com.vladmihalcea:hibernate-types-55:2.21.1")
     implementation("org.bouncycastle:bcpkix-jdk15on:1.70")
     implementation("org.bouncycastle:bcprov-jdk15on:1.70")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -32,6 +32,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-web")
+
+    // OpenAPI
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.14")
+    implementation("org.springdoc:springdoc-openapi-kotlin:1.6.14")
+    implementation("org.springdoc:springdoc-openapi-security:1.6.14")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 

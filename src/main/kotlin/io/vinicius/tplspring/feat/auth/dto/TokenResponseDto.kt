@@ -1,6 +1,6 @@
 package io.vinicius.tplspring.feat.auth.dto
 
-data class SignInResponseDto(
+data class TokenResponseDto(
     val accessToken: String,
-    val expires: Int
+    val refreshToken: String
 )

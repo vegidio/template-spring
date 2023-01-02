@@ -23,6 +23,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.web.servlet.HandlerExceptionResolver
+import java.text.ParseException
 
 @Configuration
 @EnableWebSecurity
@@ -35,6 +36,7 @@ class SecurityConfig(
         return http
             .csrf().disable()
             .authorizeRequests {
+                it.antMatchers("/v1/auth/refresh").authenticated()
                 it.antMatchers("/v1/countries/**").authenticated()
                 it.antMatchers("/v1/users/**").authenticated()
             }
@@ -45,29 +47,30 @@ class SecurityConfig(
     }
 
     private fun authEntryPoint() = AuthenticationEntryPoint { request, response, authException ->
+        authException.printStackTrace()
         resolver.resolveException(request, response, null, authException)
     }
 
     @Bean
     fun jwtEncoder() = JwtEncoder { params ->
         val header = JWSHeader.Builder(JWSAlgorithm.ES256)
-            .keyID(certProperties.privateKey?.keyID)
+            .keyID(certProperties.accessTokenPrivate?.keyID)
             .type(JOSEObjectType.JWT)
             .build()
 
         val payload = JWTClaimsSet.parse(params.claims.claims)
 
         val signedJwt = SignedJWT(header, payload)
-        signedJwt.sign(ECDSASigner(certProperties.privateKey))
+        signedJwt.sign(ECDSASigner(certProperties.accessTokenPrivate))
         signedJwt.toJwt()
     }
 
     @Bean
     fun jwtDecoder() = JwtDecoder { token ->
-        val signedJwt = SignedJWT.parse(token)
-        val isValid = signedJwt.verify(ECDSAVerifier(certProperties.publicKey))
+        val signedJwt = try { SignedJWT.parse(token) } catch (ex: ParseException) { null }
+        val isValid = signedJwt?.verify(ECDSAVerifier(certProperties.accessTokenPublic))
 
-        if (!isValid) throw UnauthorizedException(
+        if (isValid != true) throw UnauthorizedException(
             type = "JWT_INVALID",
             detail = "The bearer token is invalid"
         )

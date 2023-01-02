@@ -3,6 +3,8 @@ package io.vinicius.tplspring.exception
 import io.vinicius.tplspring.ktx.capitalize
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.security.authentication.InsufficientAuthenticationException
+import org.springframework.security.core.AuthenticationException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -43,17 +45,25 @@ class RestExceptionHandler {
     // endregion
 
     // region - HTTP 401 Unauthorized
-    @ExceptionHandler(value = [UnauthorizedException::class])
-    fun handleApiException(ex: UnauthorizedException): ResponseEntity<HttpException.Body> {
-        return ResponseEntity(ex.body, ex.status)
+    @ExceptionHandler(value = [UnauthorizedException::class, InsufficientAuthenticationException::class])
+    fun handleApiException(ex: AuthenticationException): ResponseEntity<HttpException.Body> {
+        return if (ex is UnauthorizedException) {
+            ResponseEntity(ex.body, ex.status)
+        } else {
+            val type = "JWT_INVALID"
+            val detail = "The bearer token is invalid"
+            val exception = UnauthorizedException(type = type, detail = detail)
+            ResponseEntity(exception.body, exception.status)
+        }
     }
     // endregion
 
     // region - HTTP 500 Internal Server Error
     @ExceptionHandler(value = [Exception::class])
     fun handleApiException(ex: Exception): ResponseEntity<HttpException.Body> {
+        ex.printStackTrace()
         val title = "Unexpected error"
-        val detail = ex.message
+        val detail = "For security reasons, check the server logs for detailed information"
         val exception = ServerErrorException(title = title, detail = detail)
         return ResponseEntity(exception.body, exception.status)
     }
