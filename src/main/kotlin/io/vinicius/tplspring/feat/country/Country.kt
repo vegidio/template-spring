@@ -38,7 +38,7 @@ data class Country(
     val population: Int,
     val area: Float,
 
-    // The @Type(parameter =) must be added because real / Float is no longer supported
+    // The @Type(parameters =) must be added because real / Float is no longer supported
     // https://github.com/vladmihalcea/hypersistence-utils/issues/500#issuecomment-1283670602
     @Type(type = "list-array", parameters = [Parameter(name = "sql_array_type", value = "real")])
     val coordinates: List<Float>,
