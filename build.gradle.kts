@@ -22,7 +22,7 @@ repositories {
 dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-jaxb-annotations")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("com.vladmihalcea:hibernate-types-55:2.21.1")
+    implementation("io.hypersistence:hypersistence-utils-hibernate-55:3.0.1")
     implementation("org.bouncycastle:bcpkix-jdk15on:1.70")
     implementation("org.bouncycastle:bcprov-jdk15on:1.70")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
