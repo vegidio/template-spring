@@ -45,11 +45,13 @@ class RestExceptionHandler {
     // endregion
 
     // region - HTTP 401 Unauthorized
-    @ExceptionHandler(value = [
-        UnauthorizedException::class,
-        InsufficientAuthenticationException::class,
-        AccessDeniedException::class
-    ])
+    @ExceptionHandler(
+        value = [
+            UnauthorizedException::class,
+            InsufficientAuthenticationException::class,
+            AccessDeniedException::class
+        ]
+    )
     fun handleApiException(ex: RuntimeException): ResponseEntity<HttpException.Body> {
         return if (ex is UnauthorizedException) {
             ResponseEntity(ex.body, ex.status)

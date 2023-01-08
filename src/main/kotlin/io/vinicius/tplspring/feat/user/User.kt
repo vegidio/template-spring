@@ -1,7 +1,7 @@
 package io.vinicius.tplspring.feat.user
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.JsonProperty.*
+import com.fasterxml.jackson.annotation.JsonProperty.Access
 import org.hibernate.annotations.Generated
 import org.hibernate.annotations.GenerationTime
 import javax.persistence.Entity
