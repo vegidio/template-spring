@@ -1,0 +1,73 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+    id: Int!
+    name: String!
+    username: String!
+    email: String!
+}
+
+type Name {
+    common: String!
+    official: String!
+    nativeName: [NativeName!]!
+}
+
+type NativeName {
+    language: String!
+    common: String!
+    official: String!
+}
+
+type Language {
+    code: String!
+    name: String!
+}
+
+type Currency {
+    code: String!
+    name: String!
+    symbol: String
+}
+
+type Flag {
+    png: String!
+    svg: String!
+}
+
+type Country {
+    code: String!
+    name: Name!
+    capital: String
+    region: String!
+    subRegion: String
+    languages: [Language!]!
+    currencies: [Currency!]!
+    population: Int!
+    area: Float!
+    coordinates: [Float!]!
+    flags: Flag!
+}
+
+type TokenResponseDto {
+    accessToken: String!
+    refreshToken: String!
+}
+
+type Query {
+    refresh: TokenResponseDto!
+    me: User!
+    countries: [Country!]!
+    country(code: String!): Country!
+}
+
+type Mutation {
+    signIn(dto: SignInRequestDto!): TokenResponseDto!
+}
+
+input SignInRequestDto {
+    email: String!
+    password: String!
+}

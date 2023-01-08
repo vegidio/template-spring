@@ -15,7 +15,7 @@ import javax.validation.constraints.Size
 @PreAuthorize("isAuthenticated()")
 @Validated
 @RestController
-@RequestMapping("v1/countries")
+@RequestMapping("\${apiPrefix}/v1/countries")
 @Tag(name = "Country")
 class CountryController(private val countryService: CountryService) {
 
