@@ -5,16 +5,13 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import io.vinicius.tplspring.feat.auth.dto.SignInRequestDto
 import io.vinicius.tplspring.feat.auth.dto.TokenResponseDto
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.web.bind.annotation.*
 import java.security.Principal
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("v1/auth")
+@RequestMapping("\${apiPrefix}/v1/auth")
 @Tag(name = "Auth")
 class AuthController(private val authService: AuthService) {
 
@@ -23,6 +20,7 @@ class AuthController(private val authService: AuthService) {
         return authService.signIn(dto.email, dto.password)
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("refresh")
     @Operation(security = [SecurityRequirement(name = "refresh-token")])
     fun refresh(principal: Principal): TokenResponseDto {

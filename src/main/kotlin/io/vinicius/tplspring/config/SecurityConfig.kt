@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.Customizer
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder
 import org.springframework.security.oauth2.jwt.JwtDecoder
@@ -26,7 +26,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver
 import java.text.ParseException
 
 @Configuration
-@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 class SecurityConfig(
     private val certProperties: CertProperties,
     @Qualifier("handlerExceptionResolver") private val resolver: HandlerExceptionResolver
@@ -35,11 +35,6 @@ class SecurityConfig(
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         return http
             .csrf().disable()
-            .authorizeRequests {
-                it.antMatchers("/v1/auth/refresh").authenticated()
-                it.antMatchers("/v1/countries/**").authenticated()
-                it.antMatchers("/v1/users/**").authenticated()
-            }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .oauth2ResourceServer { it.authenticationEntryPoint(authEntryPoint()).jwt() }
             .httpBasic(Customizer.withDefaults())

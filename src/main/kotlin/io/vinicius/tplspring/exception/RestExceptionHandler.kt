@@ -3,8 +3,8 @@ package io.vinicius.tplspring.exception
 import io.vinicius.tplspring.ktx.capitalize
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.authentication.InsufficientAuthenticationException
-import org.springframework.security.core.AuthenticationException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -45,8 +45,12 @@ class RestExceptionHandler {
     // endregion
 
     // region - HTTP 401 Unauthorized
-    @ExceptionHandler(value = [UnauthorizedException::class, InsufficientAuthenticationException::class])
-    fun handleApiException(ex: AuthenticationException): ResponseEntity<HttpException.Body> {
+    @ExceptionHandler(value = [
+        UnauthorizedException::class,
+        InsufficientAuthenticationException::class,
+        AccessDeniedException::class
+    ])
+    fun handleApiException(ex: RuntimeException): ResponseEntity<HttpException.Body> {
         return if (ex is UnauthorizedException) {
             ResponseEntity(ex.body, ex.status)
         } else {
