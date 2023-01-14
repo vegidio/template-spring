@@ -1,6 +1,5 @@
 package io.vinicius.tplspring.feat.country
 
-import io.vinicius.tplspring.feat.country.converter.CountryCode
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.QueryMapping
 import org.springframework.security.access.prepost.PreAuthorize
@@ -20,8 +19,8 @@ class CountryResolver(private val countryService: CountryService) {
     fun findByCode(
         @Argument
         @Size(min = 3, max = 3, message = "must be 3 characters long")
-        @CountryCode code: String
+        code: String
     ): Country {
-        return countryService.findByCode(code)
+        return countryService.findByCode(code.uppercase())
     }
 }

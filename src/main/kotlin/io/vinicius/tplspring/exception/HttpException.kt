@@ -1,6 +1,6 @@
 package io.vinicius.tplspring.exception
 
-import com.fasterxml.jackson.annotation.JsonInclude
+import io.vinicius.tplspring.model.Error
 import org.springframework.http.HttpStatus
 
 open class HttpException(
@@ -10,17 +10,5 @@ open class HttpException(
     detail: String? = null,
     instance: String? = null
 ) : RuntimeException() {
-    val body = Body(status.value(), type, title, detail, instance)
-
-    /**
-     * https://www.rfc-editor.org/rfc/rfc7807
-     */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    data class Body(
-        val status: Int,
-        val type: String,
-        val title: String? = null,
-        val detail: String? = null,
-        val instance: String? = null
-    )
+    val body = Error(status.value(), type, title, detail, instance)
 }
