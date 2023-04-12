@@ -50,7 +50,7 @@ class SecurityConfig(
     @Bean
     fun jwtEncoder() = JwtEncoder { params ->
         val header = JWSHeader.Builder(JWSAlgorithm.ES256)
-            .keyID(certProperties.accessTokenPrivate?.keyID)
+            .keyID(certProperties.accessTokenPrivate.keyID)
             .type(JOSEObjectType.JWT)
             .build()
 
