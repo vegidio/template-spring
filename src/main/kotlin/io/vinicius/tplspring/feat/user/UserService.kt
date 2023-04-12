@@ -6,11 +6,9 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserService(private val userRepo: UserRepository) {
-    fun findById(id: Int): User {
-        return userRepo.findByIdOrNull(id) ?: throw NotFoundException(detail = "No user found with this id")
-    }
+    fun findById(id: Int): User =
+        userRepo.findByIdOrNull(id) ?: throw NotFoundException(detail = "No user found with this id")
 
-    fun findByEmail(email: String): User {
-        return userRepo.findByEmail(email) ?: throw NotFoundException(detail = "No user found with this id")
-    }
+    fun findByEmail(email: String): User =
+        userRepo.findByEmail(email) ?: throw NotFoundException(detail = "No user found with this id")
 }

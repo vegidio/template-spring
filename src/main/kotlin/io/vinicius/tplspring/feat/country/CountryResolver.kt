@@ -11,16 +11,14 @@ import javax.validation.constraints.Size
 class CountryResolver(private val countryService: CountryService) {
 
     @QueryMapping(name = "countries")
-    fun findAll(): List<Country> {
-        return countryService.findAll()
-    }
+    fun findAll(): List<Country> =
+        countryService.findAll()
 
     @QueryMapping(name = "country")
     fun findByCode(
         @Argument
         @Size(min = 3, max = 3, message = "must be 3 characters long")
         code: String
-    ): Country {
-        return countryService.findByCode(code.uppercase())
-    }
+    ): Country =
+        countryService.findByCode(code.uppercase())
 }

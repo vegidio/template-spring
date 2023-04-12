@@ -1,7 +1,8 @@
 object Versions {
     const val bouncycastle = "1.70"
+    const val detekt = "1.23.0-RC1"
     const val hibernate_utils = "3.0.1"
-    const val kotlin = "1.6.21"
+    const val kotlin = "1.8.20"
     const val ktlint = "11.0.0"
     const val spring = "1.0.13.RELEASE"
     const val spring_boot = "2.7.3"

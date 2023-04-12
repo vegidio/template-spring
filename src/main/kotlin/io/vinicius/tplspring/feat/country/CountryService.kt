@@ -6,11 +6,9 @@ import org.springframework.stereotype.Service
 
 @Service
 class CountryService(private val countryRepo: CountryRepository) {
-    fun findAll(): List<Country> {
-        return countryRepo.findCountries()
-    }
+    fun findAll(): List<Country> =
+        countryRepo.findCountries()
 
-    fun findByCode(code: String): Country {
-        return countryRepo.findByIdOrNull(code) ?: throw NotFoundException(detail = "No country found with this code")
-    }
+    fun findByCode(code: String): Country =
+        countryRepo.findByIdOrNull(code) ?: throw NotFoundException(detail = "No country found with this code")
 }

@@ -10,15 +10,12 @@ annotation class CountryCode
 
 @Component
 class CountryCodeConverter : ConditionalGenericConverter {
-    override fun matches(sourceType: TypeDescriptor, targetType: TypeDescriptor): Boolean {
-        return targetType.getAnnotation(CountryCode::class.java) != null
-    }
+    override fun matches(sourceType: TypeDescriptor, targetType: TypeDescriptor): Boolean =
+        targetType.getAnnotation(CountryCode::class.java) != null
 
-    override fun getConvertibleTypes(): MutableSet<ConvertiblePair>? {
-        return mutableSetOf(ConvertiblePair(String::class.java, String::class.java))
-    }
+    override fun getConvertibleTypes(): MutableSet<ConvertiblePair>? =
+        mutableSetOf(ConvertiblePair(String::class.java, String::class.java))
 
-    override fun convert(source: Any?, sourceType: TypeDescriptor, targetType: TypeDescriptor): String {
-        return (source as String).uppercase()
-    }
+    override fun convert(source: Any?, sourceType: TypeDescriptor, targetType: TypeDescriptor): String =
+        (source as String).uppercase()
 }

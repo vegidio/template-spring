@@ -11,13 +11,12 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import javax.validation.ConstraintViolationException
 
+@Suppress("MethodOverloading")
 @ControllerAdvice
 class RestExceptionHandler {
 
     @ExceptionHandler(value = [HttpException::class])
-    fun handleApiException(ex: HttpException): ResponseEntity<Response<Nothing>> {
-        return ResponseEntity(Response(error = ex.body), ex.status)
-    }
+    fun handleApiException(ex: HttpException) = ResponseEntity<Response<Nothing>>(Response(error = ex.body), ex.status)
 
     // region - HTTP 400 Bad Request
     @ExceptionHandler(value = [ConstraintViolationException::class])

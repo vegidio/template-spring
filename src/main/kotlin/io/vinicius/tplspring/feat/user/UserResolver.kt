@@ -10,7 +10,6 @@ class UserResolver(private val userService: UserService) {
 
     @PreAuthorize("isAuthenticated()")
     @QueryMapping(name = "me")
-    fun findMe(principal: Principal): User {
-        return userService.findById(principal.name.toInt())
-    }
+    fun findMe(principal: Principal): User =
+        userService.findById(principal.name.toInt())
 }

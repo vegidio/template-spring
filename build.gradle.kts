@@ -8,6 +8,7 @@ plugins {
     id(Plugins.kotlin_spring) version Versions.kotlin
     id(Plugins.spring) version Versions.spring
     id(Plugins.spring_boot) version Versions.spring_boot
+    id(Plugins.detekt) version Versions.detekt
     id(Plugins.ktlint) version Versions.ktlint
 }
 
@@ -47,6 +48,12 @@ dependencies {
     testImplementation(Deps.spring_graphql_test)
     testImplementation(Deps.spring_test)
     testImplementation(Deps.spring_webflux)
+}
+
+// Detekt
+detekt {
+    config.setFrom("$rootDir/config/detekt.yml")
+    source.setFrom("$rootDir/src/main/kotlin")
 }
 
 tasks.withType<KotlinCompile> {

@@ -34,7 +34,8 @@ class SecurityConfig(
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         return http
-            .csrf().disable()
+            .csrf()
+            .disable()
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .oauth2ResourceServer { it.authenticationEntryPoint(authEntryPoint()).jwt() }
             .httpBasic(Customizer.withDefaults())
