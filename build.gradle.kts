@@ -3,12 +3,12 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 plugins {
-    id("io.spring.dependency-management") version "1.0.13.RELEASE"
-    id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
-    id("org.springframework.boot") version "2.7.3"
-    kotlin("jvm") version "1.6.21"
-    kotlin("plugin.spring") version "1.6.21"
-    kotlin("plugin.jpa") version "1.6.21"
+    id(Plugins.kotlin) version Versions.kotlin
+    id(Plugins.kotlin_jpa) version Versions.kotlin
+    id(Plugins.kotlin_spring) version Versions.kotlin
+    id(Plugins.spring) version Versions.spring
+    id(Plugins.spring_boot) version Versions.spring_boot
+    id(Plugins.ktlint) version Versions.ktlint
 }
 
 group = "io.vinicius"
@@ -20,33 +20,33 @@ repositories {
 }
 
 dependencies {
-    implementation("com.fasterxml.jackson.module:jackson-module-jaxb-annotations")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("io.hypersistence:hypersistence-utils-hibernate-55:3.0.1")
-    implementation("org.bouncycastle:bcpkix-jdk15on:1.70")
-    implementation("org.bouncycastle:bcprov-jdk15on:1.70")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-graphql")
-    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation(Deps.bouncycastle_bcpkix)
+    implementation(Deps.bouncycastle_bcprov)
+    implementation(Deps.hibernate_utils)
+    implementation(Deps.jackson_jaxb)
+    implementation(Deps.jackson_kotlin)
+    implementation(Deps.kotlin_reflect)
+    implementation(Deps.kotlin_stdlib)
+    implementation(Deps.spring_data)
+    implementation(Deps.spring_graphql)
+    implementation(Deps.spring_oauth2)
+    implementation(Deps.spring_validation)
+    implementation(Deps.spring_web)
 
     // OpenAPI
-    implementation("org.springdoc:springdoc-openapi-kotlin:1.6.14")
-    implementation("org.springdoc:springdoc-openapi-security:1.6.14")
-    implementation("org.springdoc:springdoc-openapi-ui:1.6.14")
+    implementation(Deps.springdoc_kotlin)
+    implementation(Deps.springdoc_security)
+    implementation(Deps.springdoc_ui)
 
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    annotationProcessor(Deps.spring_configuration)
 
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    developmentOnly(Deps.spring_devtools)
 
-    runtimeOnly("org.postgresql:postgresql")
+    runtimeOnly(Deps.postgres)
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework:spring-webflux")
-    testImplementation("org.springframework.graphql:spring-graphql-test")
+    testImplementation(Deps.spring_graphql_test)
+    testImplementation(Deps.spring_test)
+    testImplementation(Deps.spring_webflux)
 }
 
 tasks.withType<KotlinCompile> {
