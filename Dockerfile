@@ -1,8 +1,5 @@
 ### Build Image ###
-FROM alpine AS BUILD_IMAGE
-
-# Installing OpenJDK 17
-RUN apk add --no-cache openjdk17 binutils --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community
+FROM amazoncorretto:21-alpine AS BUILD_IMAGE
 
 # Build project
 COPY . /spring
@@ -12,8 +9,13 @@ RUN ./gradlew bootJar
 # Creating list of dependencies
 WORKDIR /spring/build/libs
 RUN unzip template-spring-1.0.0.jar
-RUN jdeps --print-module-deps --ignore-missing-deps --recursive --multi-release 17 \
+RUN jdeps --print-module-deps --ignore-missing-deps --recursive --multi-release 21 \
     --class-path="BOOT-INF/lib/*" --module-path="BOOT-INF/lib/*" template-spring-1.0.0.jar > /deps.txt
+
+# Installing dependencies
+# It must be placed at this point only, otherwise it will fail the Gradle build if put before
+# but it's also required so the jlink command works properly.
+RUN apk add --no-cache binutils
 
 # Build small JRE image
 RUN jlink --verbose \
