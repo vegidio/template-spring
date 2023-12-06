@@ -4,7 +4,6 @@ import com.nimbusds.jose.jwk.ECKey
 import com.nimbusds.jose.jwk.JWK
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding
-import org.springframework.boot.context.properties.ConstructorBinding
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -19,7 +18,6 @@ class PropertyConfiguration {
 }
 
 @ConfigurationProperties("cert")
-@ConstructorBinding
 data class CertProperties(
     val accessTokenPrivate: ECKey,
     val accessTokenPublic: ECKey,

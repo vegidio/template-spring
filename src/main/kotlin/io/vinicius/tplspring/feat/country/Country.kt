@@ -2,23 +2,22 @@ package io.vinicius.tplspring.feat.country
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import io.hypersistence.utils.hibernate.type.array.ListArrayType
+import io.hypersistence.utils.hibernate.type.json.JsonType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import org.hibernate.annotations.Parameter
 import org.hibernate.annotations.Type
-import org.hibernate.annotations.TypeDef
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
 
 @Entity
 @Table(name = "countries")
-@TypeDef(name = "list-array", typeClass = ListArrayType::class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Country(
     @Id
     val code: String,
 
-    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonType")
+    @Type(JsonType::class)
     val name: Name,
 
     @Column(nullable = true)
@@ -29,10 +28,10 @@ data class Country(
     @Column(name = "sub_region", nullable = true)
     val subRegion: String?,
 
-    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonType")
+    @Type(JsonType::class)
     val languages: List<Language>,
 
-    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonType")
+    @Type(JsonType::class)
     val currencies: List<Currency>,
 
     val population: Int,
@@ -40,10 +39,10 @@ data class Country(
 
     // The @Type(parameters =) must be added because real / Float is no longer supported
     // https://github.com/vladmihalcea/hypersistence-utils/issues/500#issuecomment-1283670602
-    @Type(type = "list-array", parameters = [Parameter(name = "sql_array_type", value = "real")])
+    @Type(value = ListArrayType::class, parameters = [Parameter(name = ListArrayType.SQL_ARRAY_TYPE, value = "real")])
     val coordinates: List<Float>,
 
-    @Type(type = "io.hypersistence.utils.hibernate.type.json.JsonType")
+    @Type(JsonType::class)
     val flags: Flag
 ) {
     data class Name(

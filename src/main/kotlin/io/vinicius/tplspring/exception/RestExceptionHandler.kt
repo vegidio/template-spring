@@ -2,6 +2,7 @@ package io.vinicius.tplspring.exception
 
 import io.vinicius.tplspring.ktx.capitalize
 import io.vinicius.tplspring.model.Response
+import jakarta.validation.ConstraintViolationException
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.security.access.AccessDeniedException
@@ -9,7 +10,6 @@ import org.springframework.security.authentication.InsufficientAuthenticationExc
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
-import javax.validation.ConstraintViolationException
 
 @Suppress("MethodOverloading")
 @ControllerAdvice

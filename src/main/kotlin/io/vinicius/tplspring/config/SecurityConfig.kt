@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.Customizer
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder
@@ -26,7 +26,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver
 import java.text.ParseException
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 class SecurityConfig(
     private val certProperties: CertProperties,
     @Qualifier("handlerExceptionResolver") private val resolver: HandlerExceptionResolver
@@ -34,10 +34,9 @@ class SecurityConfig(
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         return http
-            .csrf()
-            .disable()
+            .csrf { it.disable() } // stateless REST APIs are not susceptible to CSRF attacks
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .oauth2ResourceServer { it.authenticationEntryPoint(authEntryPoint()).jwt() }
+            .oauth2ResourceServer { it.authenticationEntryPoint(authEntryPoint()).jwt(Customizer.withDefaults()) }
             .httpBasic(Customizer.withDefaults())
             .build()
     }
@@ -80,5 +79,5 @@ class SecurityConfig(
     }
 
     @Bean
-    fun argon2(): Argon2PasswordEncoder = Argon2PasswordEncoder()
+    fun argon2(): Argon2PasswordEncoder = Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8()
 }

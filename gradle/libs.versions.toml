@@ -1,11 +1,11 @@
 [versions]
 bouncycastle = "1.70"
 detekt = "1.23.0-RC1"
-hibernate-utils = "3.0.1"
+hibernate-utils = "3.6.1"
 kotlin = "1.9.21"
 ktlint = "11.0.0"
 spring = "1.0.13.RELEASE"
-spring-boot = "2.7.3"
+spring-boot = "3.2.0"
 springdoc = "1.6.14"
 
 [plugins]
@@ -20,7 +20,7 @@ spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 [libraries]
 bouncycastle-bcpkix = { group = "org.bouncycastle", name = "bcpkix-jdk15on", version.ref = "bouncycastle" }
 bouncycastle-bcprov = { group = "org.bouncycastle", name = "bcprov-jdk15on", version.ref = "bouncycastle" }
-hibernate-utils = { group = "io.hypersistence", name = "hypersistence-utils-hibernate-55", version.ref = "hibernate-utils" }
+hibernate-utils = { group = "io.hypersistence", name = "hypersistence-utils-hibernate-62", version.ref = "hibernate-utils" }
 jackson-jaxb = { group = "com.fasterxml.jackson.module", name = "jackson-module-jaxb-annotations" }
 jackson-kotlin = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin" }
 kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect" }
