@@ -3,51 +3,51 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 plugins {
-    id(Plugins.kotlin) version Versions.kotlin
-    id(Plugins.kotlin_jpa) version Versions.kotlin
-    id(Plugins.kotlin_spring) version Versions.kotlin
-    id(Plugins.spring) version Versions.spring
-    id(Plugins.spring_boot) version Versions.spring_boot
-    id(Plugins.detekt) version Versions.detekt
-    id(Plugins.ktlint) version Versions.ktlint
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kotlin.jpa)
+    alias(libs.plugins.kotlin.spring)
+    alias(libs.plugins.spring)
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.ktlint)
 }
 
 group = "io.vinicius"
 version = "1.0.0"
-java.sourceCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_21
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation(Deps.bouncycastle_bcpkix)
-    implementation(Deps.bouncycastle_bcprov)
-    implementation(Deps.hibernate_utils)
-    implementation(Deps.jackson_jaxb)
-    implementation(Deps.jackson_kotlin)
-    implementation(Deps.kotlin_reflect)
-    implementation(Deps.kotlin_stdlib)
-    implementation(Deps.spring_data)
-    implementation(Deps.spring_graphql)
-    implementation(Deps.spring_oauth2)
-    implementation(Deps.spring_validation)
-    implementation(Deps.spring_web)
+    implementation(libs.bouncycastle.bcpkix)
+    implementation(libs.bouncycastle.bcprov)
+    implementation(libs.hibernate.utils)
+    implementation(libs.jackson.jaxb)
+    implementation(libs.jackson.kotlin)
+    implementation(libs.kotlin.reflect)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.spring.data)
+    implementation(libs.spring.graphql)
+    implementation(libs.spring.oauth2)
+    implementation(libs.spring.validation)
+    implementation(libs.spring.web)
 
     // OpenAPI
-    implementation(Deps.springdoc_kotlin)
-    implementation(Deps.springdoc_security)
-    implementation(Deps.springdoc_ui)
+    implementation(libs.springdoc.kotlin)
+    implementation(libs.springdoc.security)
+    implementation(libs.springdoc.ui)
 
-    annotationProcessor(Deps.spring_configuration)
+    annotationProcessor(libs.spring.configuration)
 
-    developmentOnly(Deps.spring_devtools)
+    developmentOnly(libs.spring.devtools)
 
-    runtimeOnly(Deps.postgres)
+    runtimeOnly(libs.postgres)
 
-    testImplementation(Deps.spring_graphql_test)
-    testImplementation(Deps.spring_test)
-    testImplementation(Deps.spring_webflux)
+    testImplementation(libs.spring.graphql.test)
+    testImplementation(libs.spring.test)
+    testImplementation(libs.spring.webflux)
 }
 
 // Detekt
@@ -59,7 +59,7 @@ detekt {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
 }
 

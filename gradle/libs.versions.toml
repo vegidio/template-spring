@@ -1,0 +1,41 @@
+[versions]
+bouncycastle = "1.70"
+detekt = "1.23.0-RC1"
+hibernate-utils = "3.0.1"
+kotlin = "1.9.21"
+ktlint = "11.0.0"
+spring = "1.0.13.RELEASE"
+spring-boot = "2.7.3"
+springdoc = "1.6.14"
+
+[plugins]
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+spring = { id = "io.spring.dependency-management", version.ref = "spring" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+
+[libraries]
+bouncycastle-bcpkix = { group = "org.bouncycastle", name = "bcpkix-jdk15on", version.ref = "bouncycastle" }
+bouncycastle-bcprov = { group = "org.bouncycastle", name = "bcprov-jdk15on", version.ref = "bouncycastle" }
+hibernate-utils = { group = "io.hypersistence", name = "hypersistence-utils-hibernate-55", version.ref = "hibernate-utils" }
+jackson-jaxb = { group = "com.fasterxml.jackson.module", name = "jackson-module-jaxb-annotations" }
+jackson-kotlin = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin" }
+kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect" }
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8" }
+postgres = { group = "org.postgresql", name = "postgresql" }
+spring-configuration = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
+spring-data = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
+spring-devtools = { group = "org.springframework.boot", name = "spring-boot-devtools" }
+spring-graphql = { group = "org.springframework.boot", name = "spring-boot-starter-graphql" }
+spring-graphql-test = { group = "org.springframework.graphql", name = "spring-graphql-test" }
+spring-oauth2 = { group = "org.springframework.boot", name = "spring-boot-starter-oauth2-resource-server" }
+spring-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
+spring-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
+spring-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+spring-webflux = { group = "org.springframework", name = "spring-webflux" }
+springdoc-kotlin = { group = "org.springdoc", name = "springdoc-openapi-kotlin", version.ref = "springdoc" }
+springdoc-security = { group = "org.springdoc", name = "springdoc-openapi-security", version.ref = "springdoc" }
+springdoc-ui = { group = "org.springdoc", name = "springdoc-openapi-ui", version.ref = "springdoc" }
