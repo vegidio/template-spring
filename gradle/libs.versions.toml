@@ -1,6 +1,6 @@
 [versions]
 bouncycastle = "1.70"
-detekt = "1.23.0-RC1"
+detekt = "1.23.4"
 hibernate-utils = "3.6.1"
 kotlin = "1.9.21"
 ktlint = "11.0.0"
