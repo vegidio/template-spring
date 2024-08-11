@@ -20,6 +20,7 @@ RUN apk add --no-cache binutils
 # Build small JRE image
 RUN jlink --verbose \
          --add-modules $(cat /deps.txt) \
+         --add-modules jdk.crypto.ec \
          --strip-debug \
          --no-man-pages \
          --no-header-files \

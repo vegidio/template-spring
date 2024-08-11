@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.convert.converter.Converter
 import org.springframework.core.io.ClassPathResource
+import java.io.InputStreamReader
 
 @Configuration
 @EnableConfigurationProperties(CertProperties::class)
@@ -28,7 +29,8 @@ data class CertProperties(
 @ConfigurationPropertiesBinding
 class CertPropertiesConverter : Converter<String, ECKey> {
     override fun convert(source: String): ECKey {
-        val content = ClassPathResource(source).file.readText()
+        val resource = ClassPathResource(source)
+        val content = InputStreamReader(resource.inputStream).readText()
         val jwk = JWK.parseFromPEMEncodedObjects(content)
         return jwk.toECKey()
     }
