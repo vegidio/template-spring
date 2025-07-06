@@ -1,4 +1,4 @@
-package io.vinicius.tplspring.feat.auth.dto
+package io.vinicius.tplspring.domain.auth.dto
 
 data class TokenResponseDto(
     val accessToken: String,

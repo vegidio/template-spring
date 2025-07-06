@@ -1,4 +1,4 @@
-package io.vinicius.tplspring.feat.country
+package io.vinicius.tplspring.domain.country
 
 import jakarta.validation.constraints.Size
 import org.springframework.graphql.data.method.annotation.Argument

@@ -1,4 +1,4 @@
-package io.vinicius.tplspring.feat.user
+package io.vinicius.tplspring.domain.user
 
 import io.vinicius.tplspring.exception.NotFoundException
 import org.springframework.data.repository.findByIdOrNull

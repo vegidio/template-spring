@@ -1,4 +1,4 @@
-package io.vinicius.tplspring.feat.country
+package io.vinicius.tplspring.domain.country
 
 import io.vinicius.tplspring.exception.NotFoundException
 import org.springframework.data.repository.findByIdOrNull

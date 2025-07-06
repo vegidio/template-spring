@@ -1,10 +1,10 @@
-package io.vinicius.tplspring.feat.auth
+package io.vinicius.tplspring.domain.auth
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import io.vinicius.tplspring.feat.auth.dto.SignInRequestDto
-import io.vinicius.tplspring.feat.auth.dto.TokenResponseDto
+import io.vinicius.tplspring.domain.auth.dto.SignInRequestDto
+import io.vinicius.tplspring.domain.auth.dto.TokenResponseDto
 import io.vinicius.tplspring.model.Response
 import jakarta.validation.Valid
 import org.springframework.security.access.prepost.PreAuthorize

@@ -1,4 +1,4 @@
-package io.vinicius.tplspring.feat.auth.dto
+package io.vinicius.tplspring.domain.auth.dto
 
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotEmpty

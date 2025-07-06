@@ -1,4 +1,4 @@
-package io.vinicius.tplspring.feat.user
+package io.vinicius.tplspring.domain.user
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement

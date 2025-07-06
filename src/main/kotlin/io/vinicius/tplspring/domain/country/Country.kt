@@ -1,4 +1,4 @@
-package io.vinicius.tplspring.feat.country
+package io.vinicius.tplspring.domain.country
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import io.hypersistence.utils.hibernate.type.array.ListArrayType

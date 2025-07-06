@@ -1,7 +1,7 @@
-package io.vinicius.tplspring.feat.auth
+package io.vinicius.tplspring.domain.auth
 
-import io.vinicius.tplspring.feat.auth.dto.SignInRequestDto
-import io.vinicius.tplspring.feat.auth.dto.TokenResponseDto
+import io.vinicius.tplspring.domain.auth.dto.SignInRequestDto
+import io.vinicius.tplspring.domain.auth.dto.TokenResponseDto
 import jakarta.validation.Valid
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping

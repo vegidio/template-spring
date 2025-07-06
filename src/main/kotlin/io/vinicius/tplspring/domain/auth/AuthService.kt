@@ -1,9 +1,9 @@
-package io.vinicius.tplspring.feat.auth
+package io.vinicius.tplspring.domain.auth
 
 import io.vinicius.tplspring.exception.UnauthorizedException
-import io.vinicius.tplspring.feat.auth.dto.TokenResponseDto
-import io.vinicius.tplspring.feat.user.User
-import io.vinicius.tplspring.feat.user.UserRepository
+import io.vinicius.tplspring.domain.auth.dto.TokenResponseDto
+import io.vinicius.tplspring.domain.user.User
+import io.vinicius.tplspring.domain.user.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder
 import org.springframework.security.oauth2.jwt.JwtClaimsSet

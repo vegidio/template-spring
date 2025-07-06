@@ -1,4 +1,4 @@
-package io.vinicius.tplspring.feat.country.converter
+package io.vinicius.tplspring.domain.country.converter
 
 import org.springframework.core.convert.TypeDescriptor
 import org.springframework.core.convert.converter.ConditionalGenericConverter

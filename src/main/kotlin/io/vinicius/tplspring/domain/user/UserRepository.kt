@@ -1,4 +1,4 @@
-package io.vinicius.tplspring.feat.user
+package io.vinicius.tplspring.domain.user
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository

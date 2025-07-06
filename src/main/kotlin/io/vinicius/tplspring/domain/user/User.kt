@@ -1,4 +1,4 @@
-package io.vinicius.tplspring.feat.user
+package io.vinicius.tplspring.domain.user
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonProperty.Access

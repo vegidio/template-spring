@@ -1,4 +1,4 @@
-package io.vinicius.tplspring.feat.country
+package io.vinicius.tplspring.domain.country
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query

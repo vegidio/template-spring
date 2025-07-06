@@ -1,4 +1,4 @@
-package io.vinicius.tplspring.feat.user
+package io.vinicius.tplspring.domain.user
 
 import org.springframework.graphql.data.method.annotation.QueryMapping
 import org.springframework.security.access.prepost.PreAuthorize
