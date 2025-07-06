@@ -35,7 +35,7 @@ dependencies {
     implementation(libs.spring.web)
 
     // OpenAPI
-    implementation(libs.springdoc.kotlin)
+    implementation(libs.springdoc.starter)
 
     annotationProcessor(libs.spring.configuration)
 
