@@ -5,8 +5,8 @@ server:
 spring:
   datasource:
     password: ${PG_PASSWORD}
-    url: jdbc:postgresql://${PG_HOST}:${PG_PORT}/countries
     username: ${PG_USERNAME}
+    url: jdbc:postgresql://${PG_HOST}:${PG_PORT}/countries
 
   graphql.schema.file-extensions: .gql
 

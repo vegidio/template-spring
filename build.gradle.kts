@@ -36,8 +36,6 @@ dependencies {
 
     // OpenAPI
     implementation(libs.springdoc.kotlin)
-    implementation(libs.springdoc.security)
-    implementation(libs.springdoc.ui)
 
     annotationProcessor(libs.spring.configuration)
 

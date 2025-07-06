@@ -2,9 +2,10 @@ package io.vinicius.tplspring.config
 
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.oas.models.Paths
 import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.security.SecurityScheme
-import org.springdoc.core.customizers.OpenApiCustomiser
+import org.springdoc.core.customizers.OpenApiCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -34,8 +35,10 @@ class OpenApiConfig {
     }
 
     @Bean
-    fun sortSchemasAlphabetically() = OpenApiCustomiser {
-        val schemas = it.components.schemas
-        it.components.schemas = schemas.toSortedMap()
+    fun sortPathsAlphabetically(): OpenApiCustomizer {
+        return OpenApiCustomizer { openApi ->
+            val map = openApi.paths.toSortedMap(String.CASE_INSENSITIVE_ORDER)
+            openApi.paths = Paths().apply { putAll(map) }
+        }
     }
 }
