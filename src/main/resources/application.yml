@@ -1,0 +1,29 @@
+server:
+  error.include-stacktrace: never
+  port: 3000
+
+spring:
+  datasource:
+    password: ${PG_PASSWORD}
+    url: jdbc:postgresql://${PG_HOST}:${PG_PORT}/countries
+    username: ${PG_USERNAME}
+
+  graphql.schema.file-extensions: .gql
+
+  jpa:
+    hibernate.ddl-auto: validate
+    open-in-view: false
+    properties.hibernate.format_sql: true
+    show-sql: false
+
+apiPrefix: /api
+
+springdoc:
+  default-produces-media-type: application/json
+  swagger-ui.path: /docs
+
+cert:
+  access-token-private: certs/access-token-private.pem
+  access-token-public: certs/access-token-public.pem
+  refresh-token-private: certs/refresh-token-private.pem
+  refresh-token-public: certs/refresh-token-public.pem
