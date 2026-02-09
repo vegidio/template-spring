@@ -29,7 +29,7 @@ import java.text.ParseException
 @EnableMethodSecurity
 class SecurityConfig(
     private val certProperties: CertProperties,
-    @Qualifier("handlerExceptionResolver") private val resolver: HandlerExceptionResolver
+    @param:Qualifier("handlerExceptionResolver") private val resolver: HandlerExceptionResolver
 ) {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {

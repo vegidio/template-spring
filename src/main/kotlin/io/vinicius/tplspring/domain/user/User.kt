@@ -19,7 +19,8 @@ data class User(
     val username: String,
     val email: String,
 
-    @Schema(hidden = true)
-    @JsonProperty(access = Access.WRITE_ONLY)
+    @field:Schema(hidden = true)
+    // Hides the field when the data class is returned to the client
+    @get:JsonProperty(access = Access.WRITE_ONLY)
     val hash: String
 )

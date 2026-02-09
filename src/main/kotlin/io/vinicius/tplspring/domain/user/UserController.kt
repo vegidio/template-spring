@@ -12,7 +12,7 @@ import java.security.Principal
 
 @PreAuthorize("isAuthenticated()")
 @RestController
-@RequestMapping("\${apiPrefix}/v1/users")
+@RequestMapping($$"${apiPrefix}/v1/users")
 @Tag(name = "User")
 class UserController(private val userService: UserService) {
 

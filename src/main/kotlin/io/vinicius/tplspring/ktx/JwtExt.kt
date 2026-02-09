@@ -17,5 +17,5 @@ fun SignedJWT.isFresh(): Boolean {
     val issued = this.jwtClaimsSet.issueTime?.toOffsetDateTime() ?: now
     val expiration = this.jwtClaimsSet.expirationTime?.toOffsetDateTime() ?: now.plusSeconds(1)
 
-    return now >= issued && now < expiration
+    return now in issued..<expiration
 }

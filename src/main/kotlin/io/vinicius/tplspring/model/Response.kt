@@ -7,6 +7,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 data class Response<T>(
     val data: T? = null,
 
-    @Schema(hidden = true)
+    @field:Schema(hidden = true)
     val error: Error? = null
 )
