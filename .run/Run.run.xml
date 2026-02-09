@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <option name="ACTIVE_PROFILES" />
+    <option name="ALTERNATIVE_JRE_PATH" value="homebrew-21" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <module name="template-spring.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="io.vinicius.tplspring.TemplateSpringApplication" />
     <method v="2">

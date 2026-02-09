@@ -1,12 +1,11 @@
 [versions]
-bouncycastle = "1.70"
+bouncycastle = "1.83"
 detekt = "1.23.4"
-hibernate-utils = "3.6.1"
-kotlin = "1.9.21"
+kotlin = "2.3.10"
 ktlint = "11.0.0"
-spring = "1.0.13.RELEASE"
-spring-boot = "3.2.0"
-springdoc = "2.5.0"
+spring = "1.1.6"
+spring-boot = "4.0.0"
+springdoc = "3.0.1"
 
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
@@ -18,9 +17,8 @@ spring = { id = "io.spring.dependency-management", version.ref = "spring" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 
 [libraries]
-bouncycastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk15on", version.ref = "bouncycastle" }
-bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk15on", version.ref = "bouncycastle" }
-hibernate-utils = { module = "io.hypersistence:hypersistence-utils-hibernate-62", version.ref = "hibernate-utils" }
+bouncycastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk18on", version.ref = "bouncycastle" }
+bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
 jackson-jaxb = { module = "com.fasterxml.jackson.module:jackson-module-jaxb-annotations" }
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
