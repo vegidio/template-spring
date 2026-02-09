@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.security.Principal
 
 @RestController
-@RequestMapping($$"${apiPrefix}/v1/auth")
+@RequestMapping("\${apiPrefix}/v1/auth")
 @Tag(name = "Auth")
 class AuthController(private val authService: AuthService) {
 

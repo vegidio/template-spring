@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 @PreAuthorize("isAuthenticated()")
 @Validated
 @RestController
-@RequestMapping($$"${apiPrefix}/v1/countries")
+@RequestMapping("\${apiPrefix}/v1/countries")
 @Tag(name = "Country")
 class CountryController(private val countryService: CountryService) {
 

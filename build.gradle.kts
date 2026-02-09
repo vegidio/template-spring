@@ -9,8 +9,10 @@ plugins {
     alias(libs.plugins.kotlin.spring)
     alias(libs.plugins.spring)
     alias(libs.plugins.spring.boot)
-    alias(libs.plugins.detekt)
-    alias(libs.plugins.ktlint)
+    // Detekt temporarily disabled - waiting for version compatible with Kotlin 2.3.10
+    // alias(libs.plugins.detekt)
+    // KtLint temporarily disabled - waiting for version compatible with Kotlin 2.3.10
+    // alias(libs.plugins.ktlint)
 }
 
 group = "io.vinicius"
@@ -48,16 +50,22 @@ dependencies {
     testImplementation(libs.spring.webflux)
 }
 
-// Detekt
+// Detekt configuration - temporarily disabled
+/*
 detekt {
     config.setFrom("$rootDir/config/detekt.yml")
     source.setFrom("$rootDir/src/main/kotlin")
 }
+*/
 
 tasks.withType<KotlinCompile> {
     compilerOptions {
-        freeCompilerArgs.add("-Xjsr305=strict")
+        freeCompilerArgs.addAll(
+            "-Xjsr305=strict",
+            "-Xlambdas=indy" // Use invokedynamic for lambdas (better performance in Kotlin 2.0+)
+        )
         jvmTarget.set(JvmTarget.JVM_21)
+        // K2 compiler is default in Kotlin 2.0+, no need to explicitly enable it
     }
 }
 

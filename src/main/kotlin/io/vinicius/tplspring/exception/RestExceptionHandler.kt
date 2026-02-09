@@ -1,6 +1,6 @@
 package io.vinicius.tplspring.exception
 
-import io.vinicius.tplspring.ktx.capitalize
+import io.vinicius.tplspring.ktx.capitalized
 import io.vinicius.tplspring.model.Response
 import jakarta.validation.ConstraintViolationException
 import org.springframework.http.ResponseEntity
@@ -22,15 +22,15 @@ class RestExceptionHandler {
     @ExceptionHandler(value = [ConstraintViolationException::class])
     fun handleApiException(ex: ConstraintViolationException): ResponseEntity<Response<Nothing>> {
         val title = with(ex.constraintViolations.first()) { "The parameter '$invalidValue' is invalid" }
-        val detail = with(ex.constraintViolations.first()) { "${propertyPath.last().name.capitalize()} $message" }
+        val detail = with(ex.constraintViolations.first()) { "${propertyPath.last().name.capitalized()} $message" }
         val exception = BadRequestException(title = title, detail = detail)
         return ResponseEntity(Response(error = exception.body), exception.status)
     }
 
     @ExceptionHandler(value = [MethodArgumentNotValidException::class])
     fun handleApiException(ex: MethodArgumentNotValidException): ResponseEntity<Response<Nothing>> {
-        val title = with(ex.fieldErrors.first()) { "Validation failed for '${objectName.capitalize()}'" }
-        val detail = with(ex.fieldErrors.first()) { "${field.capitalize()} $defaultMessage" }
+        val title = with(ex.fieldErrors.first()) { "Validation failed for '${objectName.capitalized()}'" }
+        val detail = with(ex.fieldErrors.first()) { "${field.capitalized()} $defaultMessage" }
         val exception = BadRequestException(title = title, detail = detail)
         return ResponseEntity(Response(error = exception.body), exception.status)
     }
