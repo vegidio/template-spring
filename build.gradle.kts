@@ -29,6 +29,7 @@ dependencies {
     implementation(libs.jackson.kotlin)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib)
+    implementation(libs.spring.actuator)
     implementation(libs.spring.data)
     implementation(libs.spring.graphql)
     implementation(libs.spring.oauth2)
@@ -41,6 +42,8 @@ dependencies {
     annotationProcessor(libs.spring.configuration)
 
     developmentOnly(libs.spring.devtools)
+    // Docker Compose support for automatic container management in development
+    developmentOnly(libs.spring.docker.compose)
 
     runtimeOnly(libs.postgres)
 

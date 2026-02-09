@@ -1,12 +1,37 @@
 server:
-  error.include-stacktrace: never
+  error:
+    include-stacktrace: never
+    # Enable RFC 9457 Problem Details for HTTP APIs (Spring Boot 4 modern standard)
+    include-message: always
   port: 3000
 
 spring:
+  application:
+    name: template-spring
+  mvc:
+    problemdetails:
+      # Enable Problem Details for HTTP APIs (RFC 9457)
+      enabled: true
+  threads:
+    virtual:
+      # Enable Virtual Threads (Project Loom) for better concurrency performance
+      # Requires Java 21+ and Spring Boot 3.2+
+      enabled: true
+
+  docker:
+    compose:
+      # Automatically manage Docker Compose services in development
+      # Will start containers defined in docker-compose.yml when running locally
+      enabled: true
+      lifecycle-management: start_and_stop
+      # Skip if docker-compose.yml doesn't exist (e.g., in production)
+      skip:
+        in-tests: true
+
   datasource:
-    password: ${PG_PASSWORD}
-    username: ${PG_USERNAME}
-    url: jdbc:postgresql://${PG_HOST}:${PG_PORT}/countries
+    password: ${PG_PASSWORD:postgres}
+    username: ${PG_USERNAME:postgres}
+    url: jdbc:postgresql://${PG_HOST:localhost}:${PG_PORT:5432}/countries
 
   graphql.schema.file-extensions: .gql
 
@@ -15,6 +40,18 @@ spring:
     open-in-view: false
     properties.hibernate.format_sql: true
     show-sql: false
+
+# Structured JSON logging for production environments
+logging:
+  pattern:
+    # Use JSON format for structured logging (better for log aggregation)
+    console: "{\"timestamp\":\"%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}\",\"level\":\"%level\",\"thread\":\"%thread\",\"logger\":\"%logger{36}\",\"message\":\"%replace(%msg){'\"','\\\\\"'}%n\",\"exception\":\"%replace(%ex){'\"','\\\\\"'}%n\"}"
+  level:
+    # Set appropriate log levels
+    root: INFO
+    io.vinicius.tplspring: DEBUG
+    org.springframework.web: INFO
+    org.hibernate: WARN
 
 apiPrefix: /api
 
@@ -27,3 +64,27 @@ cert:
   access-token-public: certs/access-token-public.pem
   refresh-token-private: certs/refresh-token-private.pem
   refresh-token-public: certs/refresh-token-public.pem
+
+# Spring Boot Actuator for observability and monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        # Expose health, info, metrics, and prometheus endpoints
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      # Show detailed health information
+      show-details: when-authorized
+      probes:
+        # Enable Kubernetes liveness and readiness probes
+        enabled: true
+  metrics:
+    tags:
+      # Add application name to all metrics
+      application: ${spring.application.name:template-spring}
+  observations:
+    # Enable observations for better tracing and metrics
+    key-values:
+      application: ${spring.application.name:template-spring}

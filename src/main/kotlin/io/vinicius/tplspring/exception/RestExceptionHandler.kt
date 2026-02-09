@@ -1,49 +1,56 @@
 package io.vinicius.tplspring.exception
 
 import io.vinicius.tplspring.ktx.capitalized
-import io.vinicius.tplspring.model.Response
 import jakarta.validation.ConstraintViolationException
-import org.springframework.http.ResponseEntity
-import org.springframework.http.converter.HttpMessageNotReadableException
+import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
+import org.springframework.http.ProblemDetail
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.authentication.InsufficientAuthenticationException
 import org.springframework.web.bind.MethodArgumentNotValidException
-import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.RestControllerAdvice
+import java.net.URI
 
-@Suppress("MethodOverloading")
-@ControllerAdvice
+/**
+ * Modern exception handler using RFC 9457 Problem Details for HTTP APIs.
+ * This is the standardized way to handle errors in Spring Boot 4.
+ */
+@RestControllerAdvice
 class RestExceptionHandler {
-    @ExceptionHandler(value = [HttpException::class])
-    fun handleApiException(ex: HttpException) = ResponseEntity<Response<Nothing>>(Response(error = ex.body), ex.status)
+    private val logger = LoggerFactory.getLogger(javaClass)
 
-    // region - HTTP 400 Bad Request
+    @ExceptionHandler(value = [HttpException::class])
+    fun handleHttpException(ex: HttpException): ProblemDetail {
+        val problem = ProblemDetail.forStatusAndDetail(ex.status, ex.body.detail ?: "")
+        problem.title = ex.body.title
+        problem.type = URI.create("https://api.errors/${ex.body.type}")
+        return problem
+    }
+
     @ExceptionHandler(value = [ConstraintViolationException::class])
-    fun handleApiException(ex: ConstraintViolationException): ResponseEntity<Response<Nothing>> {
-        val title = with(ex.constraintViolations.first()) { "The parameter '$invalidValue' is invalid" }
-        val detail = with(ex.constraintViolations.first()) { "${propertyPath.last().name.capitalized()} $message" }
-        val exception = BadRequestException(title = title, detail = detail)
-        return ResponseEntity(Response(error = exception.body), exception.status)
+    fun handleConstraintViolation(ex: ConstraintViolationException): ProblemDetail {
+        val violation = ex.constraintViolations.first()
+        val detail = "${violation.propertyPath.last().name.capitalized()} ${violation.message}"
+        val problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, detail)
+        problem.title = "The parameter '${violation.invalidValue}' is invalid"
+        problem.type = URI.create("https://api.errors/validation-failed")
+        problem.setProperty("invalidValue", violation.invalidValue)
+        return problem
     }
 
     @ExceptionHandler(value = [MethodArgumentNotValidException::class])
-    fun handleApiException(ex: MethodArgumentNotValidException): ResponseEntity<Response<Nothing>> {
-        val title = with(ex.fieldErrors.first()) { "Validation failed for '${objectName.capitalized()}'" }
-        val detail = with(ex.fieldErrors.first()) { "${field.capitalized()} $defaultMessage" }
-        val exception = BadRequestException(title = title, detail = detail)
-        return ResponseEntity(Response(error = exception.body), exception.status)
+    fun handleMethodArgumentNotValid(ex: MethodArgumentNotValidException): ProblemDetail {
+        val fieldError = ex.fieldErrors.first()
+        val detail = "${fieldError.field.capitalized()} ${fieldError.defaultMessage}"
+        val problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, detail)
+        problem.title = "Validation failed for '${fieldError.objectName.capitalized()}'"
+        problem.type = URI.create("https://api.errors/validation-failed")
+        problem.setProperty("field", fieldError.field)
+        problem.setProperty("rejectedValue", fieldError.rejectedValue)
+        return problem
     }
 
-    @ExceptionHandler(value = [HttpMessageNotReadableException::class])
-    fun handleApiException(ex: HttpMessageNotReadableException): ResponseEntity<Response<Nothing>> {
-        val title = "The request is incomplete or malformed."
-        val detail = ex.cause?.message
-        val exception = BadRequestException(title = title, detail = detail)
-        return ResponseEntity(Response(error = exception.body), exception.status)
-    }
-    // endregion
-
-    // region - HTTP 401 Unauthorized
     @ExceptionHandler(
         value = [
             UnauthorizedException::class,
@@ -51,26 +58,29 @@ class RestExceptionHandler {
             AccessDeniedException::class,
         ],
     )
-    fun handleApiException(ex: RuntimeException): ResponseEntity<Response<Nothing>> {
-        return if (ex is UnauthorizedException) {
-            ResponseEntity(Response(error = ex.body), ex.status)
+    fun handleUnauthorized(ex: RuntimeException): ProblemDetail =
+        if (ex is UnauthorizedException) {
+            val problem = ProblemDetail.forStatusAndDetail(ex.status, ex.body.detail ?: "")
+            problem.title = ex.body.title
+            problem.type = URI.create("https://api.errors/${ex.body.type}")
+            problem
         } else {
-            val type = "JWT_INVALID"
-            val detail = "The bearer token is invalid"
-            val exception = UnauthorizedException(type = type, detail = detail)
-            return ResponseEntity(Response(error = exception.body), exception.status)
+            val problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "The bearer token is invalid")
+            problem.title = "Unauthorized"
+            problem.type = URI.create("https://api.errors/JWT_INVALID")
+            problem
         }
-    }
-    // endregion
 
-    // region - HTTP 500 Internal Server Error
     @ExceptionHandler(value = [Exception::class])
-    fun handleApiException(ex: Exception): ResponseEntity<Response<Nothing>> {
-        ex.printStackTrace()
-        val title = "Unexpected error"
-        val detail = "For security reasons, check the server logs for detailed information"
-        val exception = ServerErrorException(title = title, detail = detail)
-        return ResponseEntity(Response(error = exception.body), exception.status)
+    fun handleGenericException(ex: Exception): ProblemDetail {
+        logger.error("Unexpected error occurred", ex)
+        val problem =
+            ProblemDetail.forStatusAndDetail(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "For security reasons, check the server logs for detailed information",
+            )
+        problem.title = "Unexpected error"
+        problem.type = URI.create("https://api.errors/internal-server-error")
+        return problem
     }
-    // endregion
 }

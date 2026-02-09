@@ -10,6 +10,7 @@ import com.nimbusds.jwt.SignedJWT
 import io.vinicius.tplspring.exception.UnauthorizedException
 import io.vinicius.tplspring.ktx.isFresh
 import io.vinicius.tplspring.ktx.toJwt
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -25,24 +26,44 @@ import org.springframework.security.web.SecurityFilterChain
 import org.springframework.web.servlet.HandlerExceptionResolver
 import java.text.ParseException
 
+/**
+ * Modern Spring Security 6+ configuration for Spring Boot 4.
+ * Uses declarative security with method-level @PreAuthorize annotations.
+ */
 @Configuration
 @EnableMethodSecurity
 class SecurityConfig(
     private val certProperties: CertProperties,
     @param:Qualifier("handlerExceptionResolver") private val resolver: HandlerExceptionResolver,
 ) {
+    private val logger = LoggerFactory.getLogger(javaClass)
+
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain =
         http
-            .csrf { it.disable() } // stateless REST APIs are not susceptible to CSRF attacks
+            .csrf { it.disable() } // Stateless REST APIs are not susceptible to CSRF attacks
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .oauth2ResourceServer { it.authenticationEntryPoint(authEntryPoint()).jwt(Customizer.withDefaults()) }
-            .httpBasic(Customizer.withDefaults())
+            .authorizeHttpRequests { authorize ->
+                authorize
+                    // Allow public access to actuator health endpoints (for K8s probes)
+                    .requestMatchers("/actuator/health/**")
+                    .permitAll()
+                    // Allow public access to OpenAPI documentation
+                    .requestMatchers("/docs/**", "/v3/api-docs/**")
+                    .permitAll()
+                    // All other requests use method-level security
+                    .anyRequest()
+                    .permitAll()
+            }.oauth2ResourceServer { oauth2 ->
+                oauth2
+                    .authenticationEntryPoint(authEntryPoint())
+                    .jwt(Customizer.withDefaults())
+            }.httpBasic(Customizer.withDefaults())
             .build()
 
     private fun authEntryPoint() =
         AuthenticationEntryPoint { request, response, authException ->
-            authException.printStackTrace()
+            logger.warn("Authentication failed for request to {}: {}", request.requestURI, authException.message)
             resolver.resolveException(request, response, null, authException)
         }
 
@@ -70,6 +91,7 @@ class SecurityConfig(
                 try {
                     SignedJWT.parse(token)
                 } catch (ex: ParseException) {
+                    logger.debug("Failed to parse JWT token", ex)
                     null
                 }
             val isValid = signedJwt?.verify(ECDSAVerifier(certProperties.accessTokenPublic))

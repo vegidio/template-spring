@@ -24,9 +24,11 @@ jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin"
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib" }
 postgres = { module = "org.postgresql:postgresql" }
+spring-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 spring-configuration = { module = "org.springframework.boot:spring-boot-configuration-processor" }
 spring-data = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
 spring-devtools = { module = "org.springframework.boot:spring-boot-devtools" }
+spring-docker-compose = { module = "org.springframework.boot:spring-boot-docker-compose" }
 spring-graphql = { module = "org.springframework.boot:spring-boot-starter-graphql" }
 spring-graphql-test = { module = "org.springframework.graphql:spring-graphql-test" }
 spring-oauth2 = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server" }
