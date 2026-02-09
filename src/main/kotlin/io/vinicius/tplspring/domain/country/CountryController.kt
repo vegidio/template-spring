@@ -18,8 +18,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("\${apiPrefix}/v1/countries")
 @Tag(name = "Country")
-class CountryController(private val countryService: CountryService) {
-
+class CountryController(
+    private val countryService: CountryService,
+) {
     @GetMapping
     @Operation(security = [SecurityRequirement(name = "access-token")])
     fun findAll(): Response<List<Country>> {
@@ -32,7 +33,7 @@ class CountryController(private val countryService: CountryService) {
     fun findByCode(
         @PathVariable
         @Size(min = 3, max = 3, message = "must be 3 characters long")
-        @CountryCode code: String
+        @CountryCode code: String,
     ): Response<Country> {
         val data = countryService.findByCode(code)
         return Response(data)

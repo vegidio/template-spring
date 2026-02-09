@@ -8,7 +8,7 @@ open class HttpException(
     type: String,
     title: String? = null,
     detail: String? = null,
-    instance: String? = null
+    instance: String? = null,
 ) : RuntimeException() {
     val body = Error(status.value(), type, title, detail, instance)
 }

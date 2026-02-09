@@ -9,7 +9,7 @@ class UnauthorizedException(
     type: String = "UNAUTHORIZED",
     title: String? = "Unauthorized",
     detail: String? = null,
-    instance: String? = null
+    instance: String? = null,
 ) : AuthenticationException(type) {
     val body = Error(status.value(), type, title, detail, instance)
 }

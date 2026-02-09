@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 @Suppress("MethodOverloading")
 @ControllerAdvice
 class RestExceptionHandler {
-
     @ExceptionHandler(value = [HttpException::class])
     fun handleApiException(ex: HttpException) = ResponseEntity<Response<Nothing>>(Response(error = ex.body), ex.status)
 
@@ -49,8 +48,8 @@ class RestExceptionHandler {
         value = [
             UnauthorizedException::class,
             InsufficientAuthenticationException::class,
-            AccessDeniedException::class
-        ]
+            AccessDeniedException::class,
+        ],
     )
     fun handleApiException(ex: RuntimeException): ResponseEntity<Response<Nothing>> {
         return if (ex is UnauthorizedException) {

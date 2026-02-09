@@ -11,34 +11,29 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class OpenApiConfig {
-
     @Bean
-    fun customOpenApi(): OpenAPI {
-        return OpenAPI()
+    fun customOpenApi(): OpenAPI =
+        OpenAPI()
             .info(
                 Info()
                     .title("Template Spring")
                     .description("API to control authentication and fetch info about countries")
-                    .version("1.0")
-            )
-            .components(
+                    .version("1.0"),
+            ).components(
                 Components()
                     .addSecuritySchemes(
                         "access-token",
-                        SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")
-                    )
-                    .addSecuritySchemes(
+                        SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT"),
+                    ).addSecuritySchemes(
                         "refresh-token",
-                        SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")
-                    )
+                        SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT"),
+                    ),
             )
-    }
 
     @Bean
-    fun sortPathsAlphabetically(): OpenApiCustomizer {
-        return OpenApiCustomizer { openApi ->
+    fun sortPathsAlphabetically(): OpenApiCustomizer =
+        OpenApiCustomizer { openApi ->
             val map = openApi.paths.toSortedMap(String.CASE_INSENSITIVE_ORDER)
             openApi.paths = Paths().apply { putAll(map) }
         }
-    }
 }

@@ -4,13 +4,14 @@ import com.nimbusds.jwt.SignedJWT
 import org.springframework.security.oauth2.jwt.Jwt
 import java.time.OffsetDateTime
 
-fun SignedJWT.toJwt() = Jwt(
-    this.serialize(),
-    this.jwtClaimsSet.issueTime?.toInstant(),
-    this.jwtClaimsSet.expirationTime?.toInstant(),
-    this.header.toJSONObject(),
-    this.jwtClaimsSet.toJSONObject()
-)
+fun SignedJWT.toJwt() =
+    Jwt(
+        this.serialize(),
+        this.jwtClaimsSet.issueTime?.toInstant(),
+        this.jwtClaimsSet.expirationTime?.toInstant(),
+        this.header.toJSONObject(),
+        this.jwtClaimsSet.toJSONObject(),
+    )
 
 fun SignedJWT.isFresh(): Boolean {
     val now = OffsetDateTime.now()

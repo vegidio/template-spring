@@ -7,5 +7,5 @@ class NotFoundException(
     type: String = "NOT_FOUND",
     title: String? = "Not Found",
     detail: String? = null,
-    instance: String? = null
+    instance: String? = null,
 ) : HttpException(status, type, title, detail, instance)

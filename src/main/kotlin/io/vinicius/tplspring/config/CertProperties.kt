@@ -23,7 +23,7 @@ data class CertProperties(
     val accessTokenPrivate: ECKey,
     val accessTokenPublic: ECKey,
     val refreshTokenPrivate: ECKey,
-    val refreshTokenPublic: ECKey
+    val refreshTokenPublic: ECKey,
 )
 
 @ConfigurationPropertiesBinding

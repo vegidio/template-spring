@@ -13,5 +13,9 @@ ij_kotlin_name_count_to_use_star_import = 999
 ij_kotlin_packages_to_use_import_on_demand = unset
 ij_visual_guides = none
 
+# KtLint
+[*.kt]
+ktlint_standard_no-blank-line-in-list = disabled
+
 [*.yml]
 indent_size = 2

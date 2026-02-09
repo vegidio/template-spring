@@ -18,10 +18,13 @@ import java.security.Principal
 @RestController
 @RequestMapping("\${apiPrefix}/v1/auth")
 @Tag(name = "Auth")
-class AuthController(private val authService: AuthService) {
-
+class AuthController(
+    private val authService: AuthService,
+) {
     @PostMapping("signin")
-    fun signIn(@Valid @RequestBody dto: SignInRequestDto): Response<TokenResponseDto> {
+    fun signIn(
+        @Valid @RequestBody dto: SignInRequestDto,
+    ): Response<TokenResponseDto> {
         val data = authService.signIn(dto.email, dto.password)
         return Response(data)
     }

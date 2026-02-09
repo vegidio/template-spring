@@ -8,17 +8,16 @@ import org.springframework.stereotype.Controller
 
 @PreAuthorize("isAuthenticated()")
 @Controller
-class CountryResolver(private val countryService: CountryService) {
-
+class CountryResolver(
+    private val countryService: CountryService,
+) {
     @QueryMapping(name = "countries")
-    fun findAll(): List<Country> =
-        countryService.findAll()
+    fun findAll(): List<Country> = countryService.findAll()
 
     @QueryMapping(name = "country")
     fun findByCode(
         @Argument
         @Size(min = 3, max = 3, message = "must be 3 characters long")
-        code: String
-    ): Country =
-        countryService.findByCode(code.uppercase())
+        code: String,
+    ): Country = countryService.findByCode(code.uppercase())
 }

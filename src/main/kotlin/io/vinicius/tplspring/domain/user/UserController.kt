@@ -14,8 +14,9 @@ import java.security.Principal
 @RestController
 @RequestMapping("\${apiPrefix}/v1/users")
 @Tag(name = "User")
-class UserController(private val userService: UserService) {
-
+class UserController(
+    private val userService: UserService,
+) {
     @GetMapping("me")
     @Operation(security = [SecurityRequirement(name = "access-token")])
     fun findMe(principal: Principal): Response<User> {

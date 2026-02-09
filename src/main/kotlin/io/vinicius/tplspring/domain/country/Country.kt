@@ -33,6 +33,7 @@ data class Country(
     val currencies: List<Currency>,
 
     val population: Int,
+
     val area: Float,
 
     @JdbcTypeCode(SqlTypes.ARRAY)
@@ -40,34 +41,34 @@ data class Country(
     val coordinates: List<Float>,
 
     @JdbcTypeCode(SqlTypes.JSON)
-    val flags: Flag
+    val flags: Flag,
 ) {
     data class Name(
         val common: String,
         val official: String,
-        val nativeName: List<NativeName>
+        val nativeName: List<NativeName>,
     )
 
     data class NativeName(
         val language: String,
         val common: String,
-        val official: String
+        val official: String,
     )
 
     data class Language(
         val code: String,
-        val name: String
+        val name: String,
     )
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     data class Currency(
         val code: String,
         val name: String,
-        val symbol: String?
+        val symbol: String?,
     )
 
     data class Flag(
         val png: String,
-        val svg: String
+        val svg: String,
     )
 }

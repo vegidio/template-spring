@@ -12,5 +12,5 @@ data class Error(
     val type: String,
     val title: String? = null,
     val detail: String? = null,
-    val instance: String? = null
+    val instance: String? = null,
 )

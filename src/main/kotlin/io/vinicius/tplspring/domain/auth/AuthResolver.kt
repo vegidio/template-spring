@@ -11,14 +11,15 @@ import org.springframework.stereotype.Controller
 import java.security.Principal
 
 @Controller
-class AuthResolver(private val authService: AuthService) {
-
+class AuthResolver(
+    private val authService: AuthService,
+) {
     @MutationMapping(name = "signIn")
-    fun signIn(@Valid @Argument dto: SignInRequestDto): TokenResponseDto =
-        authService.signIn(dto.email, dto.password)
+    fun signIn(
+        @Valid @Argument dto: SignInRequestDto,
+    ): TokenResponseDto = authService.signIn(dto.email, dto.password)
 
     @PreAuthorize("isAuthenticated()")
     @QueryMapping(name = "refresh")
-    fun refresh(principal: Principal): TokenResponseDto =
-        authService.refresh(principal.name.toInt())
+    fun refresh(principal: Principal): TokenResponseDto = authService.refresh(principal.name.toInt())
 }

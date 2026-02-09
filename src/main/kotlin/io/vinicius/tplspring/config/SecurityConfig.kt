@@ -29,54 +29,67 @@ import java.text.ParseException
 @EnableMethodSecurity
 class SecurityConfig(
     private val certProperties: CertProperties,
-    @param:Qualifier("handlerExceptionResolver") private val resolver: HandlerExceptionResolver
+    @param:Qualifier("handlerExceptionResolver") private val resolver: HandlerExceptionResolver,
 ) {
     @Bean
-    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        return http
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain =
+        http
             .csrf { it.disable() } // stateless REST APIs are not susceptible to CSRF attacks
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .oauth2ResourceServer { it.authenticationEntryPoint(authEntryPoint()).jwt(Customizer.withDefaults()) }
             .httpBasic(Customizer.withDefaults())
             .build()
-    }
 
-    private fun authEntryPoint() = AuthenticationEntryPoint { request, response, authException ->
-        authException.printStackTrace()
-        resolver.resolveException(request, response, null, authException)
-    }
-
-    @Bean
-    fun jwtEncoder() = JwtEncoder { params ->
-        val header = JWSHeader.Builder(JWSAlgorithm.ES256)
-            .keyID(certProperties.accessTokenPrivate.keyID)
-            .type(JOSEObjectType.JWT)
-            .build()
-
-        val payload = JWTClaimsSet.parse(params.claims.claims)
-
-        val signedJwt = SignedJWT(header, payload)
-        signedJwt.sign(ECDSASigner(certProperties.accessTokenPrivate))
-        signedJwt.toJwt()
-    }
+    private fun authEntryPoint() =
+        AuthenticationEntryPoint { request, response, authException ->
+            authException.printStackTrace()
+            resolver.resolveException(request, response, null, authException)
+        }
 
     @Bean
-    fun jwtDecoder() = JwtDecoder { token ->
-        val signedJwt = try { SignedJWT.parse(token) } catch (ex: ParseException) { null }
-        val isValid = signedJwt?.verify(ECDSAVerifier(certProperties.accessTokenPublic))
+    fun jwtEncoder() =
+        JwtEncoder { params ->
+            val header =
+                JWSHeader
+                    .Builder(JWSAlgorithm.ES256)
+                    .keyID(certProperties.accessTokenPrivate.keyID)
+                    .type(JOSEObjectType.JWT)
+                    .build()
 
-        if (isValid != true) throw UnauthorizedException(
-            type = "JWT_INVALID",
-            detail = "The bearer token is invalid"
-        )
+            val payload = JWTClaimsSet.parse(params.claims.claims)
 
-        if (!signedJwt.isFresh()) throw UnauthorizedException(
-            type = "JWT_EXPIRED",
-            detail = "The bearer token expired"
-        )
+            val signedJwt = SignedJWT(header, payload)
+            signedJwt.sign(ECDSASigner(certProperties.accessTokenPrivate))
+            signedJwt.toJwt()
+        }
 
-        signedJwt.toJwt()
-    }
+    @Bean
+    fun jwtDecoder() =
+        JwtDecoder { token ->
+            val signedJwt =
+                try {
+                    SignedJWT.parse(token)
+                } catch (ex: ParseException) {
+                    null
+                }
+            val isValid = signedJwt?.verify(ECDSAVerifier(certProperties.accessTokenPublic))
+
+            if (isValid != true) {
+                throw UnauthorizedException(
+                    type = "JWT_INVALID",
+                    detail = "The bearer token is invalid",
+                )
+            }
+
+            if (!signedJwt.isFresh()) {
+                throw UnauthorizedException(
+                    type = "JWT_EXPIRED",
+                    detail = "The bearer token expired",
+                )
+            }
+
+            signedJwt.toJwt()
+        }
 
     @Bean
     fun argon2(): Argon2PasswordEncoder = Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8()

@@ -6,10 +6,10 @@ import org.springframework.stereotype.Controller
 import java.security.Principal
 
 @Controller
-class UserResolver(private val userService: UserService) {
-
+class UserResolver(
+    private val userService: UserService,
+) {
     @PreAuthorize("isAuthenticated()")
     @QueryMapping(name = "me")
-    fun findMe(principal: Principal): User =
-        userService.findById(principal.name.toInt())
+    fun findMe(principal: Principal): User = userService.findById(principal.name.toInt())
 }

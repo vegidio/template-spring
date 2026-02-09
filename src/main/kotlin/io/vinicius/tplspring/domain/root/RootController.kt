@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping
 class RootController {
-
     @GetMapping
     fun root() = "Hello, world!"
 }

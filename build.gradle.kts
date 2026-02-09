@@ -9,10 +9,9 @@ plugins {
     alias(libs.plugins.kotlin.spring)
     alias(libs.plugins.spring)
     alias(libs.plugins.spring.boot)
-    // Detekt temporarily disabled - waiting for version compatible with Kotlin 2.3.10
+    // Detekt temporarily disabled - version 1.23.8 compiled with Kotlin 2.0.21, incompatible with 2.3.10
     // alias(libs.plugins.detekt)
-    // KtLint temporarily disabled - waiting for version compatible with Kotlin 2.3.10
-    // alias(libs.plugins.ktlint)
+    alias(libs.plugins.ktlint)
 }
 
 group = "io.vinicius"
@@ -50,19 +49,28 @@ dependencies {
     testImplementation(libs.spring.webflux)
 }
 
-// Detekt configuration - temporarily disabled
-/*
-detekt {
-    config.setFrom("$rootDir/config/detekt.yml")
-    source.setFrom("$rootDir/src/main/kotlin")
+// Force all dependencies to use the project's Kotlin version for compatibility
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "org.jetbrains.kotlin") {
+            useVersion(libs.versions.kotlin.get())
+        }
+    }
 }
-*/
+
+// KtLint configuration
+configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+    version.set("1.5.0") // KtLint CLI version compatible with Kotlin 2.3.10
+}
+
+// Note: Detekt unavailable - waiting for version 1.24+ with Kotlin 2.3.x support
+// Use IntelliJ IDEA code inspections in the meantime
 
 tasks.withType<KotlinCompile> {
     compilerOptions {
         freeCompilerArgs.addAll(
             "-Xjsr305=strict",
-            "-Xlambdas=indy" // Use invokedynamic for lambdas (better performance in Kotlin 2.0+)
+            "-Xlambdas=indy", // Use invokedynamic for lambdas (better performance in Kotlin 2.0+)
         )
         jvmTarget.set(JvmTarget.JVM_21)
         // K2 compiler is default in Kotlin 2.0+, no need to explicitly enable it

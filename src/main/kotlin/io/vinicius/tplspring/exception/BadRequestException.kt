@@ -7,5 +7,5 @@ class BadRequestException(
     type: String = "BAD_REQUEST",
     title: String? = "Bad Request",
     detail: String? = null,
-    instance: String? = null
+    instance: String? = null,
 ) : HttpException(status, type, title, detail, instance)
