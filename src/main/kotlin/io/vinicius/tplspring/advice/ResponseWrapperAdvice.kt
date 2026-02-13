@@ -1,4 +1,4 @@
-package io.vinicius.tplspring.config
+package io.vinicius.tplspring.advice
 
 import io.vinicius.tplspring.model.Response
 import org.springframework.core.MethodParameter

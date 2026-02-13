@@ -1,5 +1,6 @@
-package io.vinicius.tplspring.exception
+package io.vinicius.tplspring.advice
 
+import io.vinicius.tplspring.exception.UnauthorizedException
 import io.vinicius.tplspring.ktx.capitalized
 import jakarta.validation.ConstraintViolationException
 import org.slf4j.LoggerFactory
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import java.net.URI
 
 @RestControllerAdvice
-class RestExceptionHandler {
+class RestExceptionAdvice {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     @ExceptionHandler(ErrorResponseException::class)
