@@ -25,12 +25,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice
  */
 @RestControllerAdvice
 class ResponseWrapperAdvice : ResponseBodyAdvice<Any> {
-
     /**
      * Determines if this advice should be applied.
      * Only applies to non-ProblemDetail and non-Response objects.
      */
-    override fun supports(returnType: MethodParameter, converterType: Class<out HttpMessageConverter<*>>): Boolean {
+    override fun supports(
+        returnType: MethodParameter,
+        converterType: Class<out HttpMessageConverter<*>>,
+    ): Boolean {
         val parameterType = returnType.parameterType
 
         // Don't wrap if it's already a Response or ProblemDetail

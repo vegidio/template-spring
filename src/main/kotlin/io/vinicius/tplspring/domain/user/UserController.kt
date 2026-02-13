@@ -18,7 +18,5 @@ class UserController(
 ) {
     @GetMapping("me")
     @Operation(security = [SecurityRequirement(name = "access-token")])
-    fun findMe(principal: Principal): User {
-        return userService.findById(principal.name.toInt())
-    }
+    fun findMe(principal: Principal): User = userService.findById(principal.name.toInt())
 }

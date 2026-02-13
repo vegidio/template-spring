@@ -17,7 +17,11 @@ class WebConfig : WebMvcConfigurer {
      * Redirects URLs with trailing slashes to the same URL without the trailing slash.
      */
     class TrailingSlashRedirectInterceptor : HandlerInterceptor {
-        override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+        override fun preHandle(
+            request: HttpServletRequest,
+            response: HttpServletResponse,
+            handler: Any,
+        ): Boolean {
             val uri = request.requestURI
 
             if (uri.length > 1 && uri.endsWith("/")) {

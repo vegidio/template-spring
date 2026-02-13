@@ -22,9 +22,7 @@ class CountryController(
 ) {
     @GetMapping
     @Operation(security = [SecurityRequirement(name = "access-token")])
-    fun findAll(): List<Country> {
-        return countryService.findAll()
-    }
+    fun findAll(): List<Country> = countryService.findAll()
 
     @GetMapping("{code}")
     @Operation(security = [SecurityRequirement(name = "access-token")])
@@ -32,7 +30,5 @@ class CountryController(
         @PathVariable
         @Size(min = 3, max = 3, message = "must be 3 characters long")
         @CountryCode code: String,
-    ): Country {
-        return countryService.findByCode(code)
-    }
+    ): Country = countryService.findByCode(code)
 }

@@ -23,14 +23,10 @@ class AuthController(
     @PostMapping("signin")
     fun signIn(
         @Valid @RequestBody dto: SignInRequestDto,
-    ): TokenResponseDto {
-        return authService.signIn(dto.email, dto.password)
-    }
+    ): TokenResponseDto = authService.signIn(dto.email, dto.password)
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("refresh")
     @Operation(security = [SecurityRequirement(name = "refresh-token")])
-    fun refresh(principal: Principal): TokenResponseDto {
-        return authService.refresh(principal.name.toInt())
-    }
+    fun refresh(principal: Principal): TokenResponseDto = authService.refresh(principal.name.toInt())
 }

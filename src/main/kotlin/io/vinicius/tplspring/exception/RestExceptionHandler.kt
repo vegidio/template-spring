@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.authentication.InsufficientAuthenticationException
+import org.springframework.web.ErrorResponseException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -15,18 +16,19 @@ import java.net.URI
 /**
  * Modern exception handler using RFC 9457 Problem Details for HTTP APIs.
  * This is the standardized way to handle errors in Spring Boot 4.
+ *
+ * Leverages Spring's ErrorResponseException for automatic ProblemDetail support.
  */
 @RestControllerAdvice
 class RestExceptionHandler {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    @ExceptionHandler(value = [HttpException::class])
-    fun handleHttpException(ex: HttpException): ProblemDetail {
-        val problem = ProblemDetail.forStatusAndDetail(ex.status, ex.body.detail ?: "")
-        problem.title = ex.body.title
-        problem.type = URI.create("https://api.errors/${ex.body.type}")
-        return problem
-    }
+    /**
+     * Handle all ErrorResponseException subclasses (BadRequestException, NotFoundException, etc.).
+     * Spring's ErrorResponseException already contains a ProblemDetail, so just return it.
+     */
+    @ExceptionHandler(ErrorResponseException::class)
+    fun handleErrorResponse(ex: ErrorResponseException): ProblemDetail = ex.body
 
     @ExceptionHandler(value = [ConstraintViolationException::class])
     fun handleConstraintViolation(ex: ConstraintViolationException): ProblemDetail {
@@ -51,6 +53,10 @@ class RestExceptionHandler {
         return problem
     }
 
+    /**
+     * Handle Spring Security authentication exceptions.
+     * UnauthorizedException contains a ProblemDetail, others get a default JWT error.
+     */
     @ExceptionHandler(
         value = [
             UnauthorizedException::class,
@@ -59,16 +65,13 @@ class RestExceptionHandler {
         ],
     )
     fun handleUnauthorized(ex: RuntimeException): ProblemDetail =
-        if (ex is UnauthorizedException) {
-            val problem = ProblemDetail.forStatusAndDetail(ex.status, ex.body.detail ?: "")
-            problem.title = ex.body.title
-            problem.type = URI.create("https://api.errors/${ex.body.type}")
-            problem
-        } else {
-            val problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "The bearer token is invalid")
-            problem.title = "Unauthorized"
-            problem.type = URI.create("https://api.errors/JWT_INVALID")
-            problem
+        when (ex) {
+            is UnauthorizedException -> ex.problemDetail
+            else ->
+                ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "The bearer token is invalid").apply {
+                    title = "Unauthorized"
+                    type = URI.create("https://api.errors/JWT_INVALID")
+                }
         }
 
     @ExceptionHandler(value = [Exception::class])
