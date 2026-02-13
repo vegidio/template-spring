@@ -1,17 +1,21 @@
 server:
-  error:
-    include-stacktrace: never
-    # Enable RFC 9457 Problem Details for HTTP APIs (Spring Boot 4 modern standard)
-    include-message: always
   port: 3000
 
 spring:
   application:
     name: template-spring
+
+  web:
+    error:
+      include-message: always
+      # Enable RFC 9457 Problem Details for HTTP APIs (Spring Boot 4 modern standard)
+      include-stacktrace: never
+
   mvc:
     problemdetails:
       # Enable Problem Details for HTTP APIs (RFC 9457)
       enabled: true
+
   threads:
     virtual:
       # Enable Virtual Threads (Project Loom) for better concurrency performance
@@ -22,7 +26,7 @@ spring:
     compose:
       # Automatically manage Docker Compose services in development
       # Will start containers defined in docker-compose.yml when running locally
-      enabled: true
+      enabled: false
       lifecycle-management: start_and_stop
       # Skip if docker-compose.yml doesn't exist (e.g., in production)
       skip:
@@ -82,7 +86,7 @@ management:
         enabled: true
   metrics:
     tags:
-      # Add application name to all metrics
+      # Add the application name to all metrics
       application: ${spring.application.name:template-spring}
   observations:
     # Enable observations for better tracing and metrics
