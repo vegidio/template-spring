@@ -1,6 +1,5 @@
 package io.vinicius.tplspring.config
 
-import com.nimbusds.jose.jwk.ECKey
 import com.nimbusds.jose.jwk.JWK
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding
@@ -20,18 +19,20 @@ class PropertyConfiguration {
 
 @ConfigurationProperties("cert")
 data class CertProperties(
-    val accessTokenPrivate: ECKey,
-    val accessTokenPublic: ECKey,
-    val refreshTokenPrivate: ECKey,
-    val refreshTokenPublic: ECKey,
+    val accessTokenPrivate: JWK,
+    val accessTokenPublic: JWK,
+    val refreshTokenPrivate: JWK,
+    val refreshTokenPublic: JWK,
 )
 
 @ConfigurationPropertiesBinding
-class CertPropertiesConverter : Converter<String, ECKey> {
-    override fun convert(source: String): ECKey {
+class CertPropertiesConverter : Converter<String, JWK> {
+    override fun convert(source: String): JWK {
         val resource = ClassPathResource(source)
         val content = InputStreamReader(resource.inputStream).readText()
         val jwk = JWK.parseFromPEMEncodedObjects(content)
+
+        // ECKey extends JWK, so we can return it directly
         return jwk.toECKey()
     }
 }
