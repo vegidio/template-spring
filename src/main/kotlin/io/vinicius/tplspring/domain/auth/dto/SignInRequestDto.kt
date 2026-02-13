@@ -8,6 +8,7 @@ data class SignInRequestDto(
     @field:NotEmpty
     @field:Email
     val email: String,
+
     @field:NotEmpty
     val password: String,
 )

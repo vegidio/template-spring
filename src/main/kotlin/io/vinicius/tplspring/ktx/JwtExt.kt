@@ -2,7 +2,7 @@ package io.vinicius.tplspring.ktx
 
 import com.nimbusds.jwt.SignedJWT
 import org.springframework.security.oauth2.jwt.Jwt
-import java.time.OffsetDateTime
+import java.time.Instant
 
 fun SignedJWT.toJwt() =
     Jwt(
@@ -14,9 +14,9 @@ fun SignedJWT.toJwt() =
     )
 
 fun SignedJWT.isFresh(): Boolean {
-    val now = OffsetDateTime.now()
-    val issued = this.jwtClaimsSet.issueTime?.toOffsetDateTime() ?: now
-    val expiration = this.jwtClaimsSet.expirationTime?.toOffsetDateTime() ?: now.plusSeconds(1)
+    val now = Instant.now()
+    val issued = this.jwtClaimsSet.issueTime?.toInstant() ?: return false
+    val expiration = this.jwtClaimsSet.expirationTime?.toInstant() ?: return false
 
-    return now in issued..<expiration
+    return !now.isBefore(issued) && now.isBefore(expiration)
 }
