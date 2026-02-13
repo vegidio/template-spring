@@ -8,17 +8,52 @@ This document outlines all the modern Spring Boot 4 features that have been impl
 
 **What Changed:**
 
-- Migrated from custom `Response<T>` wrapper to standard `ProblemDetail`
-- Updated `RestExceptionHandler` to extend `ResponseEntityExceptionHandler`
+- Implemented standard `ProblemDetail` for **error responses only**
+- Updated `RestExceptionHandler` to use RFC 9457 Problem Details
 - Enabled Problem Details in `application.yml`
+- **Kept** `Response<T>` wrapper for **success responses** (provides consistent `data` field wrapper)
 
 **Benefits:**
 
 - Industry-standard error responses (RFC 9457)
+- Success responses maintain consistent `{"data": {...}}` structure
 - Better client error handling and debugging
-- Consistent error format across all APIs
+- Dual-mode approach: wrapped success responses, standardized error responses
 - Additional error context through `setProperty()` method
-- Automatic integration with Spring Boot's error handling
+- Prevents breaking changes to API contracts
+
+**Example Success Response:**
+
+```json
+{
+    "data": {
+        "code": "USA",
+        "name": {
+            "common": "United States",
+            "official": "United States of America"
+        },
+        "capital": "Washington, D.C.",
+        "region": "Americas"
+    }
+}
+```
+
+**Example Success Response (List):**
+
+```json
+{
+    "data": [
+        {
+            "code": "USA",
+            "name": { "common": "United States" }
+        },
+        {
+            "code": "BRA",
+            "name": { "common": "Brazil" }
+        }
+    ]
+}
+```
 
 **Example Error Response:**
 
@@ -33,6 +68,12 @@ This document outlines all the modern Spring Boot 4 features that have been impl
     "rejectedValue": "US"
 }
 ```
+
+**Response Strategy:**
+
+- ✅ **Success (2xx)**: `Response<T>` wrapper with `data` field
+- ✅ **Error (4xx/5xx)**: `ProblemDetail` (RFC 9457 standard)
+- ✅ Best of both worlds: consistent success wrapper + standardized error format
 
 **Files Modified:**
 

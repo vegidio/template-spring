@@ -9,13 +9,18 @@ max_line_length = 120
 trim_trailing_whitespace = true
 
 # IntelliJ
-ij_kotlin_name_count_to_use_star_import = 999
-ij_kotlin_packages_to_use_import_on_demand = unset
 ij_visual_guides = none
 
 # KtLint
 [*.kt]
+ij_kotlin_name_count_to_use_star_import = 999
+ij_kotlin_packages_to_use_import_on_demand = unset
 ktlint_standard_no-blank-line-in-list = disabled
+
+[*.java]
+ij_java_class_count_to_use_import_on_demand = 999
+ij_java_names_count_to_use_import_on_demand = 999
+ij_java_packages_to_use_import_on_demand = unset
 
 [*.yml]
 indent_size = 2

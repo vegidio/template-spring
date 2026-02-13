@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import io.vinicius.tplspring.domain.country.converter.CountryCode
-import io.vinicius.tplspring.model.Response
 import jakarta.validation.constraints.Size
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.validation.annotation.Validated
@@ -23,9 +22,8 @@ class CountryController(
 ) {
     @GetMapping
     @Operation(security = [SecurityRequirement(name = "access-token")])
-    fun findAll(): Response<List<Country>> {
-        val data = countryService.findAll()
-        return Response(data)
+    fun findAll(): List<Country> {
+        return countryService.findAll()
     }
 
     @GetMapping("{code}")
@@ -34,8 +32,7 @@ class CountryController(
         @PathVariable
         @Size(min = 3, max = 3, message = "must be 3 characters long")
         @CountryCode code: String,
-    ): Response<Country> {
-        val data = countryService.findByCode(code)
-        return Response(data)
+    ): Country {
+        return countryService.findByCode(code)
     }
 }
