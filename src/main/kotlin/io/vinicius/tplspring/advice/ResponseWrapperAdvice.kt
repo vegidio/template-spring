@@ -52,6 +52,10 @@ class ResponseWrapperAdvice : ResponseBodyAdvice<Any> {
         request: ServerHttpRequest,
         response: ServerHttpResponse,
     ): Any? {
+        // Don't wrap SpringDoc/OpenAPI endpoints (swagger-ui, api-docs)
+        val path = request.uri.path
+        if (path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui")) return body
+
         // If the body is null, return Response with null data
         // Otherwise wrap the body in Response
         return Response(data = body)

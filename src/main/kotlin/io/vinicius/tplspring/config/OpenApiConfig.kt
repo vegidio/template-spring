@@ -36,4 +36,13 @@ class OpenApiConfig {
             val map = openApi.paths.toSortedMap(String.CASE_INSENSITIVE_ORDER)
             openApi.paths = Paths().apply { putAll(map) }
         }
+
+    @Bean
+    fun sortSchemasAlphabetically(): OpenApiCustomizer =
+        OpenApiCustomizer { openApi ->
+            openApi.components?.schemas?.let { schemas ->
+                val map = schemas.toSortedMap(String.CASE_INSENSITIVE_ORDER)
+                openApi.components.schemas = map
+            }
+        }
 }

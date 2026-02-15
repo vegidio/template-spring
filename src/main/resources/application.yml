@@ -61,7 +61,8 @@ apiPrefix: /api
 
 springdoc:
   default-produces-media-type: application/json
-  swagger-ui.path: /docs
+  swagger-ui:
+    path: /docs
 
 cert:
   access-token-private: certs/access-token-private.pem
