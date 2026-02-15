@@ -11,38 +11,38 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice
 
 /**
- * Automatically wraps all successful REST responses in Response<T> wrapper.
+ * Automatically wraps all REST responses in Response wrapper.
  *
  * This advice intercepts all controller responses and:
- * - Wraps domain objects in Response(data = ...) for consistency
- * - Leaves ProblemDetail responses unwrapped (handled by exception handler)
- * - Leaves already-wrapped Response<T> objects unchanged
+ * - Wraps successful responses in 'Response(data = ...)'
+ * - Wraps error responses (ProblemDetail) in 'Response(error = ...)'
+ * - Leaves already-wrapped Response objects unchanged
  *
  * Benefits:
  * - Controllers can return domain objects directly
- * - Consistent {"data": {...}} wrapper for all successful responses
+ * - Consistent {"data": {...}} wrapper for successful responses
+ * - Consistent {"error": {...}} wrapper for error responses
  * - No manual wrapping needed in controller methods
  */
 @RestControllerAdvice
 class ResponseWrapperAdvice : ResponseBodyAdvice<Any> {
+
     /**
      * Determines if this advice should be applied.
-     * Only applies to non-ProblemDetail and non-Response objects.
+     * Applies to all responses except those already wrapped.
      */
     override fun supports(
         returnType: MethodParameter,
         converterType: Class<out HttpMessageConverter<*>>,
     ): Boolean {
         val parameterType = returnType.parameterType
-
-        // Don't wrap if it's already a Response or ProblemDetail
-        return parameterType != Response::class.java &&
-            parameterType != ProblemDetail::class.java &&
-            !ProblemDetail::class.java.isAssignableFrom(parameterType)
+        // Don't wrap if it's already a Response
+        return parameterType != Response::class.java
     }
 
     /**
-     * Wraps the response body in Response<T> before serialization.
+     * Wraps the response body in Response before serialization.
+     * Uses 'data' field for successful responses and the 'error' field for ProblemDetail.
      */
     override fun beforeBodyWrite(
         body: Any?,
@@ -56,8 +56,12 @@ class ResponseWrapperAdvice : ResponseBodyAdvice<Any> {
         val path = request.uri.path
         if (path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui")) return body
 
-        // If the body is null, return Response with null data
-        // Otherwise wrap the body in Response
+        // Wrap ProblemDetail in the 'error' field
+        if (body is ProblemDetail) {
+            return Response<Any>(error = body)
+        }
+
+        // Wrap everything else in the 'data' field
         return Response(data = body)
     }
 }
