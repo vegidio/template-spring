@@ -1,0 +1,9 @@
+spring:
+  jpa:
+    hibernate:
+      # Use 'update' for local development - automatically creates/updates schema
+      # This is safe for development but should NEVER be used in production
+      ddl-auto: update
+
+    # Show SQL in development for debugging
+    show-sql: true

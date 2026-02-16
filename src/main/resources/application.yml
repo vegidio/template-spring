@@ -5,10 +5,14 @@ spring:
   application:
     name: template-spring
 
+  profiles:
+    # Use 'dev' profile by default for local development
+    # Override with SPRING_PROFILES_ACTIVE=prod in production
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
   web:
     error:
       include-message: always
-      # Enable RFC 9457 Problem Details for HTTP APIs (Spring Boot 4 modern standard)
       include-stacktrace: never
 
   mvc:
@@ -26,7 +30,7 @@ spring:
     compose:
       # Automatically manage Docker Compose services in development
       # Will start containers defined in docker-compose.yml when running locally
-      enabled: false
+      enabled: true
       lifecycle-management: start_and_stop
       # Skip if docker-compose.yml doesn't exist (e.g., in production)
       skip:
